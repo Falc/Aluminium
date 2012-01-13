@@ -20,29 +20,20 @@ class ComponentLoader {
 	private $loaded_components = array();
 
 	/**
-	 * Loads the specified component.
+	 * Loads the specified components.
 	 *
-	 * @param	string	Name of the component to load.
+	 * @param	mixed	Name of the components to load (string for a single component).
 	 */
-	public function load($component_name) {
-		// Do not load the component if it is already loaded
-		if(!isset($this->loaded_components[$component_name])) {
-			include(ALUMINIUM_COMPONENTS.$component_name.'/'.$component_name.'.php');
+	public function load($components) {
+		$components = (array) $components;
 
-			$class_name = str_replace('_', '', $component_name);
-			$this->loaded_components[$component_name] = new $class_name;
-		}
-	}
+		foreach($components as $component_name) {
+			// Do not load the component if it is already loaded
+			if(!isset($this->loaded_components[$component_name])) {
+				include(ALUMINIUM_COMPONENTS.$component_name.'/'.$component_name.'.php');
 
-	/**
-	 * Loads every component specified in the array.
-	 *
-	 * @param	array	List containing names of components to load.
-	 */
-	public function load_array($components) {
-		if(!empty($components)) {
-			foreach($components as $component) {
-				$this->load($component);
+				$class_name = str_replace('_', '', $component_name);
+				$this->loaded_components[$component_name] = new $class_name;
 			}
 		}
 	}
@@ -64,5 +55,24 @@ class ComponentLoader {
 		return $this->loaded_components[$component_name];
 	}
 
+	/**
+	 * Triggers an event.
+	 *
+	 * Every loaded component will be notified, so those with an appropiate handler will react.
+	 *
+	 * @param	string	Event name.
+	 */
+	public function event($event_name) {
+		foreach($this->loaded_components as $component_name => $component) {
+			$event_handler = $event_name.'_event';
+
+			// Check wether the component can react to this event
+			if(method_exists($component, $event_handler) && is_callable($component->$event_handler())) {
+				$component->$event();
+			}
+		}
+	}
+
 }
+
 ?>
