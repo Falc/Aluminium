@@ -36,6 +36,7 @@ class Aluminium {
 
 		// The core classes are required
 		require_once(ALUMINIUM_CORE.'component_loader.php');
+		require_once(ALUMINIUM_CORE.'functions.php');
 
 		// Instance the component loader
 		$this->components = new ComponentLoader();
