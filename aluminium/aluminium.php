@@ -28,6 +28,7 @@ class Aluminium {
 		// Define the app's full and relative paths
 		define('APP_PATH',			$path.'/');
 		define('APP_BASE_PATH',		basename($path).'/');
+		define('APP_CONFIG',		APP_PATH.'config/');
 
 		// Define Aluminium's main paths
 		define('ALUMINIUM_PATH',		dirname(__FILE__).'/');
@@ -47,6 +48,8 @@ class Aluminium {
 	 */
 	public function run() {
 		echo '<p>Aluminium is working!</p>';
+
+		$this->components->event('url_request');
 	}
 
 }
