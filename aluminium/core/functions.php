@@ -15,7 +15,7 @@
  * This is a core function that acts as a proxy for ComponentLoader->event() method.
  * Core functions can be called from anywhere.
  *
- * @param	string	Event name.
+ * @param	string	$event_name	Event name.
  */
 function event($event_name) {
 	global $app;
@@ -28,7 +28,7 @@ function event($event_name) {
  * This is a core function that acts as a proxy for ComponentLoader->load() method.
  * Core functions can be called from anywhere.
  *
- * @param	mixex	Name of the components to load (string for a single component).
+ * @param	mixed	$component	Name of the components to load (string for a single component).
  */
 function load_component($component) {
 	global $app;
@@ -41,7 +41,7 @@ function load_component($component) {
  * This is a core function that acts as a proxy for ComponentLoader->get() method.
  * Core functions can be called from anywhere.
  *
- * @param	string	Name of the component to get.
+ * @param	string	$component	Name of the component to get.
  * @return	mixed	A component instance.
  */
 function get_component($component) {

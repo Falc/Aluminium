@@ -22,7 +22,7 @@ class Aluminium {
 	/**
 	 * Aluminium's constructor.
 	 *
-	 * @param	string	The app's root folder where the app is located, usually dirname(__FILE__).
+	 * @param	string	$path	The app's root folder where the app is located, usually dirname(__FILE__).
 	 */
 	public function __construct($path) {
 		// Define the app's full and relative paths

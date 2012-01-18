@@ -1,6 +1,6 @@
 <?php
 /**
- * This file contains the MVC component.
+ * This file contains the MVC component class.
  *
  * @author		Aitor García <aitor.falc@gmail.com>
  * @copyright	2012 Aitor García <aitor.falc@gmail.com>
