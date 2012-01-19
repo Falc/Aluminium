@@ -63,7 +63,9 @@ class ComponentLoader {
 	 * @param	string	$event_name	Event name.
 	 * @param	array	$params	List of params that will be passed to the event handler.
 	 */
-	public function event($event_name, array $params = null) {
+	public function event($event_name, $params = null) {
+		$params = (array) $params;
+
 		foreach($this->loaded_components as $component_name => $component) {
 			$event_handler = $event_name.'_event';
 
