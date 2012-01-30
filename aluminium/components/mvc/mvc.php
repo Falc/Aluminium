@@ -31,6 +31,11 @@ class MVC {
 
 			define('ALUMINIUM_MVC',		TRUE);
 		}
+
+		// Include the class files needed by the component
+		require_once(ALUMINIUM_COMPONENTS.'mvc/model.php');
+		require_once(ALUMINIUM_COMPONENTS.'mvc/view.php');
+		require_once(ALUMINIUM_COMPONENTS.'mvc/controller.php');
 	}
 
 }
