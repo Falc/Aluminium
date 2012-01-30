@@ -31,7 +31,7 @@ class Router {
 	 * Gets the routes from the config file.
 	 */
 	public function __construct() {
-		// Require the files needed by the component
+		// Include the class files needed by the component
 		require_once(ALUMINIUM_COMPONENTS.'router/router.php');
 		require_once(ALUMINIUM_COMPONENTS.'router/route.php');
 
