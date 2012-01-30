@@ -19,11 +19,6 @@
  */
 class MVC {
 	/**
-	 * A Router instance.
-	 */
-	private $router;
-
-	/**
 	 * MVC constructor.
 	 *
 	 * Defines some constants and loads the required configuration.
