@@ -55,9 +55,8 @@ class Aluminium {
 	 */
 	public function run() {
 		echo '<p>Aluminium is working!</p>';
-
-		$this->components->event('path_request');
 	}
 
 }
+
 ?>

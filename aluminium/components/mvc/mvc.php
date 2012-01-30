@@ -33,14 +33,9 @@ class MVC {
 			define('APP_MODELS',		APP_PATH.'models/');
 			define('APP_CONTROLLERS',	APP_PATH.'controllers/');
 			define('APP_VIEWS',			APP_PATH.'views/');
+
 			define('ALUMINIUM_MVC',		TRUE);
 		}
-	}
-
-	/**
-	 * Handler for url_request event.
-	 */
-	public function url_request_event($params) {
 	}
 
 }

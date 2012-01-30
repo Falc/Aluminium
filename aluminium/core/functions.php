@@ -10,19 +10,6 @@
  */
 
 /**
- * Triggers an event.
- *
- * This is a core function that acts as a proxy for ComponentLoader->event() method.
- * Core functions can be called from anywhere.
- *
- * @param	string	$event_name	Event name.
- */
-function event($event_name) {
-	global $app;
-	$app->components->event($event_name);
-}
-
-/**
  * Loads the specified components.
  *
  * This is a core function that acts as a proxy for ComponentLoader->load() method.
