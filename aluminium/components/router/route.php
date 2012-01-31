@@ -23,7 +23,7 @@ class Route {
 	 *
 	 * @var string
 	 */
-	private $path;
+	protected $path;
 
 	/**
 	 * The `REQUEST_METHOD` value must match one of the methods in this array;
@@ -31,14 +31,14 @@ class Route {
 	 *
 	 * @var array
 	 */
-	private $method;
+	protected $method;
 
 	/**
 	 * A map of param tokens to their regex subpatterns.
 	 *
 	 * @var array
 	 */
-	private $params;
+	protected $params;
 
 	/**
 	 * A map of param tokens to their default values; if this Route is matched, these will retain
@@ -46,21 +46,21 @@ class Route {
 	 *
 	 * @var array
 	 */
-	private $values;
+	protected $values;
 
 	/**
 	 * The $path property converted to a regular expression, using the $params subpatterns.
 	 *
 	 * @var string
 	 */
-	private $regex;
+	protected $regex;
 
 	/**
 	 * All param matches found in the path during the is_match() process.
 	 *
 	 * @var string
 	 */
-	private $matches;
+	protected $matches;
 
 	/**
 	 * Route constructor.

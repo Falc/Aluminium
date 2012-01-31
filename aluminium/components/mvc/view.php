@@ -21,28 +21,28 @@ class View {
 	 *
 	 * @var array
 	 */
-	private $_vars;
+	protected $_vars;
 
 	/**
 	 * The name of the theme, if using any. It is used to compose the path when looking for a template to load.
 	 *
 	 * @var string
 	 */
-	private $_theme;
+	protected $_theme;
 
 	/**
 	 * The name of the template. It is used to compose the path when looking for a template to load.
 	 *
 	 * @var string
 	 */
-	private $_template;
+	protected $_template;
 
 	/**
 	 * The content of the view after being built.
 	 *
 	 * @var string
 	 */
-	private $_content;
+	protected $_content;
 
 	/**
 	 * View constructor.
