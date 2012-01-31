@@ -21,62 +21,108 @@ class View {
 	 *
 	 * @var array
 	 */
-	private $vars;
+	private $_vars;
 
 	/**
 	 * The name of the theme, if using any. It is used to compose the path when looking for a template to load.
 	 *
 	 * @var string
 	 */
-	private $theme;
+	private $_theme;
 
 	/**
 	 * The name of the template. It is used to compose the path when looking for a template to load.
 	 *
 	 * @var string
 	 */
-	private $template;
+	private $_template;
+
+	/**
+	 * The content of the view after being built.
+	 *
+	 * @var string
+	 */
+	private $_content;
 
 	/**
 	 * View constructor.
 	 *
-	 * It tries to load the given template if not null.
-	 *
-	 * @param	mixed	$theme		The theme's name or null.
 	 * @param	mixed	$template	The template's name or null.
+	 * @param	mixed	$theme		The theme's name or null.
 	 */
-	public function __construct($theme = null, $template = null) {
-		$this->vars = array();
-		$this->theme = $theme;
-		$this->template = $template;
-
-		// If the template is not null, try to load it
-		if(!is_null($this->template)) {
-			$this->load_template($template);
-		}
+	public function __construct($template = null, $theme = null) {
+		$this->_vars = array();
+		$this->_theme = $theme;
+		$this->_template = $template;
+		$this->_content = null;
 	}
 
 	/**
-	 * Loads a template into the view.
+	 * Magic get.
 	 *
-	 * @param	string	$template	The template's name.
+	 * @param	int		$index	Index of the element in the array.
+	 * @return	mixed
 	 */
-	public function load_template($template) {
-		$template_name = '';
+	public function __get($index) {
+		return $this->_vars[$index];
+	}
 
-		if(!is_null($this->theme)) {
-			$template_name .= $this->theme;
+	/**
+	 * Magic set.
+	 *
+	 * @param	int		$index	Index of the element in the array.
+	 * @param	mixed	$value	Data to store in the array.
+	 */
+	public function __set($index, $value) {
+		$this->_vars[$index] = $value;
+	}
+
+	/**
+	 * Builds the view pushing the vars into the specified template.
+	 *
+	 * This method does not display the view, just builds it and stores the content into the $_content
+	 * property for reusing it later, when desired.
+	 */
+	public function build() {
+		if(is_null($this->_template)) {
+			die('Template not asigned.');
 		}
 
-		if(!is_null($template)) {
-			$template_name .= $template;
+		$template_name = !is_null($this->_theme) ? '' : $this->_theme;
+		$template_name .= $this->_template.'.php';
+
+		if(!file_exists(APP_VIEWS.$template_name)) {
+			die('Template not found: "'.$template_name.'".');
 		}
 
-		if(!file_exists(APP_VIEWS.$this->template_name)) {
-			die('Template not found:"'.$this->template_name.'".');
+		foreach ($this->_vars as $name => $value) {
+			$$name = $value;
 		}
 
-		// Load the content
+		ob_start();
+		include(APP_VIEWS.$template_name);
+		$this->_content = ob_get_clean();
+	}
+
+	/**
+	 * Displays the view.
+	 */
+	public function display() {
+		// Build the view if not built yet
+		if(is_null($this->_content)) {
+			$this->build();
+		}
+
+		echo $this->_content;
+	}
+
+	/**
+	 * Gets the view content.
+	 *
+	 * @return	The content of the view after being built.
+	 */
+	public function get_content() {
+		return $this->_content;
 	}
 
 }
