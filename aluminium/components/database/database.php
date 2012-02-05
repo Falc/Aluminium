@@ -62,6 +62,8 @@ class Database {
 
 	/**
 	 * Database constructor.
+	 *
+	 * Loads the required configuration and checks some values are valid. Then instances the specified database driver.
 	 */
 	public function __construct() {
 		define('DB_DRIVERS_PATH',	dirname(__FILE__).'/drivers/');
@@ -79,6 +81,20 @@ class Database {
 		if(!in_array($conf['driver'], $available_drivers)) {
 			die('Error: The selected driver is not valid. Available drivers: '.implode(', ', $available_drivers).'.');
 		}
+
+		// If the specified driver file does not exist, stop the process
+		$driver_file = DB_DRIVERS_PATH.$conf['driver'].'_driver.php';
+		if(!file_exists($driver_file)) {
+			die('Error: File '.$conf['driver'].'_driver.php not found in '.DB_DRIVERS_PATH);
+		}
+
+		// Include the required driver class files
+		require_once(DB_DRIVERS_PATH.'database_driver.php');
+		require_once($driver_file);
+
+		// Create the driver instance
+		$driver_class = $conf['driver'].'_Driver';
+		$this->driver = new $driver_class();
 
 		// If no host was set, use '127.0.0.1' as default
 		$this->db_host = (isset($conf['host']) && !empty($conf['host'])) ? $conf['host'] : '127.0.0.1';
