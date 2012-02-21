@@ -17,11 +17,8 @@
  */
 class MySQL_Driver extends DatabaseDriver {
 
-	public function __construct() {
-	}
-
 	public function connect($conf) {
-		echo '<p>MySQL own connect method!</p>';
+		return new PDO('mysql:host='.$conf['host'].';dbname='.$conf['name'], $conf['user'], $conf['pass']);
 	}
 
 }

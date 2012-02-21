@@ -17,9 +17,6 @@
  */
 abstract class DatabaseDriver {
 
-	public function __construct() {
-	}
-
 	abstract function connect($conf);
 
 }
