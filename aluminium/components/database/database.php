@@ -73,6 +73,13 @@ class Database {
 	private $query;
 
 	/**
+	 * PDOStatement instance.
+	 *
+	 * @var PDOStatement
+	 */
+	private $statement;
+
+	/**
 	 * A list containing the parameters used in $query.
 	 *
 	 * @var array
@@ -283,10 +290,36 @@ class Database {
 	 */
 	public function clear() {
 		$this->query = null;
+		$this->statement = null;
 		$this->params = array();
 	}
 
+	/**
+	 * Executes the built query.
+	 */
 	public function execute() {
+		// If the query is null or empty, stop the process
+		if(is_null($this->query) || empty($this->query)) {
+			die('Error: there is no query to execute.');
+		}
+
+		try {
+			$this->connect();
+
+			// Prepare the statement
+			$this->statement = $this->db_con->prepare($this->query);
+
+			// Parameter binding
+			foreach($this->params as $key=>$param) {
+				$this->statement->bindParam($key+1, $param);
+			}
+
+			// Execute the statement
+			$this->statement->execute($this->params);
+		}
+		catch(PDOException $error) {
+			echo $error->getMessage();
+		}
 	}
 
 }
