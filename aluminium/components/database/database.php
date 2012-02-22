@@ -344,6 +344,11 @@ class Database {
 	 * Returns an array containing all of the result set rows as instances of $class.
 	 */
 	public function fetch_all_as_class($class, $parameters = null) {
+		// If the class is not defined, stop the process
+		if(!class_exists($class, FALSE)) {
+			die('Error: class "'.$class.'" is not defined.');
+		}
+
 		$this->statement->setFetchMode(PDO::FETCH_CLASS, $class, $parameters);
 		return $this->fetch_all();
 	}
@@ -367,6 +372,11 @@ class Database {
 	 * Returns the next row from the result set as an instance of $class.
 	 */
 	public function fetch_as_class($class, $parameters = null) {
+		// If the class is not defined, stop the process
+		if(!class_exists($class, FALSE)) {
+			die('Error: class "'.$class.'" is not defined.');
+		}
+
 		$this->statement->setFetchMode(PDO::FETCH_CLASS, $class, $parameters);
 		return $this->fetch();
 	}
