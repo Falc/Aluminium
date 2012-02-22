@@ -164,6 +164,11 @@ class Database {
 
 	/**
 	 * Creates a query that inserts $values into $table.
+	 *
+	 * The query will not be executed until execute() is called.
+	 *
+	 * @param	string	$table	The name of the table where $values will be inserted.
+	 * @param	array	$values	An associative array with the format column => value.
 	 */
 	public function insert($table, $values) {
 		// The query, statement and parameters should be cleared before doing anything
@@ -192,6 +197,12 @@ class Database {
 
 	/**
 	 * Creates a query that updates $values on $table.
+	 *
+	 * The query can be extended using some methods like where($clauses) to add some clauses,
+	 * but it will not be executed until execute() is called.
+	 *
+	 * @param	string	$table	The name of the table where $values will be changed.
+	 * @param	array	$values	An associative array with the format column => value.
 	 */
 	public function update($table, $values) {
 		// The query, statement and parameters should be cleared before doing anything
@@ -217,6 +228,11 @@ class Database {
 
 	/**
 	 * Creates a query that deletes rows from $table.
+	 *
+	 * The query can be extended using some methods like where($clauses) to add some clauses,
+	 * but it will not be executed until execute() is called.
+	 *
+	 * @param	string	$table	The name of the table where $values will be changed.
 	 */
 	public function delete($table) {
 		// The query, statement and parameters should be cleared before doing anything
@@ -229,6 +245,12 @@ class Database {
 
 	/**
 	 * Sets the SELECT part of the query.
+	 *
+	 * The FROM part MUST be set calling the from($table) method right after select($columns).
+	 * When the FROM part is set, the query can be extended using some methods like where($clauses) to
+	 * add some clauses, but it will not be executed until execute() is called.
+	 *
+	 * @param	string	$columns	A comma-separated list of columns.
 	 */
 	public function select($columns = '*') {
 		// The query, statement and parameters should be cleared before doing anything
@@ -241,6 +263,10 @@ class Database {
 
 	/**
 	 * Sets the FROM part of a SELECT query.
+	 *
+	 * This method must be called before execute() and right after select($columns).
+	 *
+	 * @param	string	$table	The name of the table where data will be selected from.
 	 */
 	public function from($table) {
 		$this->query .= ' FROM '.$table;
@@ -250,6 +276,17 @@ class Database {
 
 	/**
 	 * Sets the WHERE clauses of the query.
+	 *
+	 * Clause format: array([Logical operator,] 'column', 'Comparison function/operator', 'value/s')
+	 *
+	 * Example:
+	 * $clauses = array (
+	 *     array('name', 'IS', 'John'),
+	 *     array('AND', 'age', '>', 35),
+	 *     array('OR', 'city', 'IN', ('London', 'Bilbao', 'Tokyo')
+	 * );
+	 *
+	 * @param	array	$clauses	An array of clauses.
 	 */
 	public function where($clauses = null) {
 		// If there are no clauses, just ignore the WHERE part
@@ -296,6 +333,10 @@ class Database {
 
 	/**
 	 * Executes the built query.
+	 *
+	 * The insert(), update(), delete() and select() methods don't perform any query against the database.
+	 * Instead, they build the query (partially in some cases) and wait for an execute() call. This allows
+	 * to extend the query with methods like where($clauses).
 	 */
 	public function execute() {
 		// If the query is null or empty, stop the process
@@ -342,6 +383,9 @@ class Database {
 
 	/**
 	 * Returns an array containing all of the result set rows as instances of $class.
+	 *
+	 * @param	string	$class		The name of an existent class. Rows will be returned as instances of that class.
+	 * @param	array	$parameters	An array of parameters that will be passed to the constructor.
 	 */
 	public function fetch_all_as_class($class, $parameters = null) {
 		// If the class is not defined, stop the process
@@ -370,6 +414,9 @@ class Database {
 
 	/**
 	 * Returns the next row from the result set as an instance of $class.
+	 *
+	 * @param	string	$class		The name of an existent class. Rows will be returned as instances of that class.
+	 * @param	array	$parameters	An array of parameters that will be passed to the constructor.
 	 */
 	public function fetch_as_class($class, $parameters = null) {
 		// If the class is not defined, stop the process
