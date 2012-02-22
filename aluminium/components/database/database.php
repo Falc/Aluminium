@@ -316,6 +316,9 @@ class Database {
 
 			// Execute the statement
 			$this->statement->execute($this->params);
+
+			// Set the default fetch mode to PDO::FETCH_ASSOC
+			$this->statement->setFetchMode(PDO::FETCH_ASSOC);
 		}
 		catch(PDOException $error) {
 			echo $error->getMessage();
