@@ -322,6 +322,52 @@ class Database {
 		}
 	}
 
+	/**
+	 * Returns an array containing all of the result set rows.
+	 */
+	public function fetch_all() {
+		return $this->statement->fetchAll();
+	}
+
+	/**
+	 * Returns an array containing all of the result set rows as associative arrays.
+	 */
+	public function fetch_all_as_array() {
+		$this->statement->setFetchMode(PDO::FETCH_ASSOC);
+		return $this->fetch_all();
+	}
+
+	/**
+	 * Returns an array containing all of the result set rows as instances of $class.
+	 */
+	public function fetch_all_as_class($class, $parameters = null) {
+		$this->statement->setFetchMode(PDO::FETCH_CLASS, $class, $parameters);
+		return $this->fetch_all();
+	}
+
+	/**
+	 * Returns the next row from the result set.
+	 */
+	public function fetch() {
+		return $this->statement->fetch();
+	}
+
+	/**
+	 * Returns the next row from the result set as an associative array.
+	 */
+	public function fetch_as_array() {
+		$this->statement->setFetchMode(PDO::FETCH_ASSOC);
+		return $this->fetch();
+	}
+
+	/**
+	 * Returns the next row from the result set as an instance of $class.
+	 */
+	public function fetch_as_class($class, $parameters = null) {
+		$this->statement->setFetchMode(PDO::FETCH_CLASS, $class, $parameters);
+		return $this->fetch();
+	}
+
 }
 
 ?>
