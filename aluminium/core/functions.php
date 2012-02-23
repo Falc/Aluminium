@@ -51,4 +51,9 @@ function load_components(array $components) {
 	return $instances;
 }
 
+function start_debug_mode() {
+	error_reporting(E_ALL);
+	ini_set('display_errors', 1);
+}
+
 ?>
