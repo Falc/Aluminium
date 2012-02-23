@@ -17,7 +17,6 @@
  */
 class Aluminium {
 
-	public $components;
 	public $main_conf;
 
 	/**
@@ -43,11 +42,7 @@ class Aluminium {
 		define('ALUMINIUM_COMPONENTS',	ALUMINIUM_PATH.'components/');
 
 		// The core classes are required
-		require_once(ALUMINIUM_CORE.'component_loader.php');
 		require_once(ALUMINIUM_CORE.'functions.php');
-
-		// Instance the component loader
-		$this->components = new ComponentLoader();
 	}
 
     /**
