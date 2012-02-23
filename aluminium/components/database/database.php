@@ -92,10 +92,14 @@ class Database {
 	 * Loads the required configuration, checks it and finally instances the specified database driver.
 	 */
 	public function __construct() {
-		define('DB_DRIVERS_PATH',	dirname(__FILE__).'/drivers/');
+		if(!defined('ALUMINIUM_DATABASE')) {
+			define('DB_DRIVERS_PATH',	dirname(__FILE__).'/drivers/');
+
+			define('ALUMINIUM_DATABASE',	TRUE);
+		}
 
 		// Load the configuration
-		$conf = require_once(APP_CONFIG.'database_conf.php');
+		$conf = require(APP_CONFIG.'database_conf.php');
 
 		// If no driver was set, stop the process
 		if(!isset($conf['driver']) || empty($conf['driver'])) {

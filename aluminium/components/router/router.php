@@ -32,11 +32,10 @@ class Router {
 	 */
 	public function __construct() {
 		// Include the class files needed by the component
-		require_once(ALUMINIUM_COMPONENTS.'router/router.php');
 		require_once(ALUMINIUM_COMPONENTS.'router/route.php');
 
 		// Load the configuration
-		$routes = require_once(APP_CONFIG.'routes_conf.php');
+		$routes = require(APP_CONFIG.'routes_conf.php');
 		$this->routes = array();
 
 		foreach($routes as $route) {
