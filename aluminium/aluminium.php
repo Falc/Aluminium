@@ -31,11 +31,15 @@ class Aluminium {
 		define('ALUMINIUM_COMPONENTS',	ALUMINIUM_PATH.'components/');
 
 		// Define the app's full path
-		define('APP_PATH',			$path.'/');
-		define('APP_CONFIG',		APP_PATH.'config/');
+		define('APP_PATH',		$path.'/');
+		define('APP_CONFIG',	APP_PATH.'config/');
+		define('APP_LOGS',		APP_PATH.'logs/');
 
 		// The core classes are required
 		require_once(ALUMINIUM_CORE.'functions.php');
+
+		// Set a default timezone
+		date_default_timezone_set('UTC');
 
 		// Load app's main configuration
 		$this->main_conf = require_once(APP_CONFIG.'main_conf.php');
