@@ -27,15 +27,19 @@ function load_component($component) {
 			die('Error: File "'.$class_file.'" can not be found.');
 		}
 
+		// Include the class file
 		require($class_file);
 
+		// Remove underscores, file names use them, class names don't
+		$class = str_replace('_', '', $component);
+
 		// If the class does not exist, stop the process
-		if(!class_exists($component, FALSE)) {
-			die('Error: Class "'.$component.'" can not be found.');
+		if(!class_exists($class, FALSE)) {
+			die('Error: Class "'.$class.'" can not be found.');
 		}
 	}
 
-	return new $component();
+	return new $class();
 }
 
 /**

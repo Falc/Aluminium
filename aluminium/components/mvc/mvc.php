@@ -57,6 +57,9 @@ class MVC {
 		// Include the controller class file
 		require_once($class_file);
 
+		// Remove underscores, file names use them, class names don't
+		$class = str_replace('_', '', $class);
+
 		// If the class does not exist, stop the process
 		if(!class_exists($class, FALSE)) {
 			die('Error: Class "'.$class.'" not found.');
