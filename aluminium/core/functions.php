@@ -24,10 +24,15 @@ function load_component($component) {
 
 		// If the class file does not exist, stop the process
 		if(!file_exists($class_file)) {
-			die('Error: The component "'.$component.'" can not be found.');
+			die('Error: File "'.$class_file.'" can not be found.');
 		}
 
 		require($class_file);
+
+		// If the class does not exist, stop the process
+		if(!class_exists($component, FALSE)) {
+			die('Error: Class "'.$component.'" can not be found.');
+		}
 	}
 
 	return new $component();
