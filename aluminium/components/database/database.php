@@ -99,7 +99,7 @@ class Database {
 		}
 
 		// Load the configuration
-		$conf = require(APP_CONFIG.'database_conf.php');
+		$conf = require(APP_CONF.'database_conf.php');
 
 		// If no driver was set, stop the process
 		if(!isset($conf['driver']) || empty($conf['driver'])) {
