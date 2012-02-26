@@ -178,6 +178,12 @@ class Database {
 		// The query, statement and parameters should be cleared before doing anything
 		$this->clear();
 
+		// Try to use the driver's own insert() method if defined
+		if(method_exists($this->driver, insert)) {
+			$this->driver->insert($table, $values);
+			return $this;
+		}
+
 		$cols = '';
 		$placeholders = '';
 
@@ -212,6 +218,12 @@ class Database {
 		// The query, statement and parameters should be cleared before doing anything
 		$this->clear();
 
+		// Try to use the driver's own update() method if defined
+		if(method_exists($this->driver, update)) {
+			$this->driver->update($table, $values);
+			return $this;
+		}
+
 		$data = '';
 
 		// Build $data (a comma separated list of positional placeholders) before using them in a prepared statement
@@ -242,6 +254,12 @@ class Database {
 		// The query, statement and parameters should be cleared before doing anything
 		$this->clear();
 
+		// Try to use the driver's own delete() method if defined
+		if(method_exists($this->driver, delete)) {
+			$this->driver->delete($table);
+			return $this;
+		}
+
 		$this->query = 'DELETE FROM '.$table;
 
 		return $this;
@@ -260,6 +278,12 @@ class Database {
 		// The query, statement and parameters should be cleared before doing anything
 		$this->clear();
 
+		// Try to use the driver's own select() method if defined
+		if(method_exists($this->driver, select)) {
+			$this->driver->select($columns);
+			return $this;
+		}
+
 		$this->query = 'SELECT '.$columns;
 
 		return $this;
@@ -273,6 +297,12 @@ class Database {
 	 * @param	string	$table	The name of the table where data will be selected from.
 	 */
 	public function from($table) {
+		// Try to use the driver's own from() method if defined
+		if(method_exists($this->driver, from)) {
+			$this->driver->from($table);
+			return $this;
+		}
+
 		$this->query .= ' FROM '.$table;
 
 		return $this;
@@ -293,6 +323,12 @@ class Database {
 	 * @param	array	$clauses	An array of clauses.
 	 */
 	public function where($clauses = null) {
+		// Try to use the driver's own where() method if defined
+		if(method_exists($this->driver, where)) {
+			$this->driver->where($clauses);
+			return $this;
+		}
+
 		// If there are no clauses, just ignore the WHERE part
 		if(is_null($clauses) || empty($clauses)) {
 			return;
@@ -333,6 +369,12 @@ class Database {
 	 * @param	string	$direction		The sort direction. If not defined, ASC will be used.
 	 */
 	public function order_by($order_by, $direction = 'ASC') {
+		// Try to use the driver's own order_by() method if defined
+		if(method_exists($this->driver, order_by)) {
+			$this->driver->order_by($order_by, $direction);
+			return $this;
+		}
+
 		$this->query .= ' ORDER BY '.$order_by.' '.$direction;
 
 		return $this;
@@ -342,6 +384,12 @@ class Database {
 	 * Clears the SQL query, PDO statement and parameter list
 	 */
 	public function clear() {
+		// Try to use the driver's own clear() method if defined
+		if(method_exists($this->driver, clear)) {
+			$this->driver->clear($table, $values);
+			return $this;
+		}
+
 		$this->query = null;
 		$this->statement = null;
 		$this->params = array();
