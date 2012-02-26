@@ -15,9 +15,14 @@
  * @package		Aluminium
  * @subpackage	Components
  */
-class MySQL_Driver extends DatabaseDriver {
+class MySQLDriver extends DatabaseDriver {
 
-	public function connect($conf) {
+	/**
+	 * Creates a PDO instance using the MySQL driver.
+	 *
+	 * @param	array	$conf	A list containing the database host, port, name, user and pass.
+	 */
+	public function create_pdo_instance($conf) {
 		return new PDO('mysql:host='.$conf['host'].';dbname='.$conf['name'], $conf['user'], $conf['pass']);
 	}
 
