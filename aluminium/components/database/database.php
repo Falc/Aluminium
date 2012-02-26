@@ -327,6 +327,18 @@ class Database {
 	}
 
 	/**
+	 * Sets the ORDER BY part of a SELECT query.
+	 *
+	 * @param	string	$sort_criteria	The sort criteria, usually column names.
+	 * @param	string	$direction		The sort direction. If not defined, ASC will be used.
+	 */
+	public function order_by($order_by, $direction = 'ASC') {
+		$this->query .= ' ORDER BY '.$order_by.' '.$direction;
+
+		return $this;
+	}
+
+	/**
 	 * Clears the SQL query, PDO statement and parameter list
 	 */
 	public function clear() {
