@@ -46,7 +46,7 @@ class MVC {
 	 * @param	string	$name		The name of the class to instance.
 	 * @param	mixed	$parameters	A list of parameters or null if any.
 	 */
-	public function load_controller($class, $parameters) {
+	public function load_controller($class, $parameters = null) {
 		$class_file = APP_CONTROLLERS.$class.'.php';
 
 		// If the class file does not exist, stop the process
