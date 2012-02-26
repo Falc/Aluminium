@@ -18,9 +18,11 @@
  * @return	mixed	A component instance.
  */
 function load_component($component) {
+	$class = $component;
+
 	// If the class is not already included, do it
-	if(!class_exists($component, FALSE)) {
-		$class_file = ALUMINIUM_COMPONENTS.$component.'/'.$component.'.php';
+	if(!class_exists($class, FALSE)) {
+		$class_file = ALUMINIUM_COMPONENTS.$class.'/'.$class.'.php';
 
 		// If the class file does not exist, stop the process
 		if(!file_exists($class_file)) {
@@ -31,7 +33,7 @@ function load_component($component) {
 		require($class_file);
 
 		// Remove underscores, file names use them, class names don't
-		$class = str_replace('_', '', $component);
+		$class = str_replace('_', '', $class);
 
 		// If the class does not exist, stop the process
 		if(!class_exists($class, FALSE)) {
