@@ -98,7 +98,7 @@ function write_log($message, $log_filename = 'others', $log_directory = APP_LOGS
 	}
 
 	$output = "\n";
-	$output .= date('M d H:i:s ');
+	$output .= date('M d H:i:s ').substr(microtime(), 0, 5).' | ';
 	$output .= $message;
 
 	// Append the log message
