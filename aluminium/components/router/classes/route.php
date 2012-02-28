@@ -5,7 +5,7 @@
  * It is based on the Router package from "The Aura Project for PHP", licensed under the Simplified BSD license.
  *
  * @copyright	2010-2011 The Aura Project for PHP <http://auraphp.github.com/>
- * @license		http://opensource.org/licenses/bsd-license.php Simplified BSD License
+ * @license		https://github.com/auraphp/Aura.Router/blob/master/LICENSE Simplified BSD License
  * @package		Aluminium
  * @subpackage	Components
  */
