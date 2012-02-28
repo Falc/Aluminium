@@ -301,6 +301,23 @@ abstract class DatabaseDriver {
 	}
 
 	/**
+	 * Sets the part used to limit the result set of a SELECT query.
+	 *
+	 * @param	int	$num_rows	The maximum number of rows that should be returned.
+	 * @param	int $offset		The number of rows that will be skipped.
+	 */
+	public function limit($num_rows, $offset = 0) {
+		$this->query .= ' LIMIT '.$num_rows;
+
+		// The OFFSET clause is not needed when $offset is 0
+		if($offset != 0) {
+			$this->query .= ' OFFSET '.$offset;
+		}
+
+		return $this;
+	}
+
+	/**
 	 * Clears the SQL query, PDO statement and parameter list
 	 */
 	public function clear() {
