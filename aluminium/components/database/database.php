@@ -28,6 +28,11 @@ class Database {
 			define('DB_DRIVERS_PATH',	dirname(__FILE__).'/drivers/');
 
 			define('ALUMINIUM_DATABASE',	TRUE);
+
+			// [Debug log]
+			if(function_exists('write_debug_log')) {
+				write_debug_log('Database instance created successfully.', 'database');
+			}
 		}
 	}
 
@@ -80,7 +85,14 @@ class Database {
 
 		// Create the driver instance
 		$driver_class = $driver.'Driver';
-		return new $driver_class($db_host, $db_port, $db_name, $db_user, $db_pass);
+		$driver_instance = new $driver_class($db_host, $db_port, $db_name, $db_user, $db_pass);
+
+		// [Debug log]
+		if(function_exists('write_debug_log')) {
+			write_debug_log('[DatabaseDriver] '.$driver.' loaded successfully.', 'database');
+		}
+
+		return $driver_instance;
 	}
 
 }

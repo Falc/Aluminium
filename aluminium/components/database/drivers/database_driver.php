@@ -121,6 +121,12 @@ abstract class DatabaseDriver {
 
 			$this->db_con->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 			$this->db_con->exec('SET NAMES utf8');
+
+			// [Debug log]
+			if(function_exists('write_debug_log')) {
+				write_debug_log('[Connection] '.$conf['name'].' '.$conf['user'].'@'.$conf['host'].':'.$conf['port'], 'database');
+			}
+
 		}
 		catch(PDOException $error) {
 			echo $error->getMessage();
@@ -355,6 +361,17 @@ abstract class DatabaseDriver {
 
 			// Set the default fetch mode to PDO::FETCH_ASSOC
 			$this->statement->setFetchMode(PDO::FETCH_ASSOC);
+
+			// [Debug log]
+			if(function_exists('write_debug_log')) {
+				write_debug_log('[Query] '.$this->query, 'database');
+
+				foreach($this->params as $key=>$param) {
+					write_debug_log('[Parameter bound] '.$key.' => '.$param, 'database');
+				}
+
+				write_debug_log('[Rows affected] '.$this->statement->rowCount(), 'database');
+			}
 		}
 		catch(PDOException $error) {
 			echo $error->getMessage();
