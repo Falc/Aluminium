@@ -140,12 +140,14 @@ class Debug {
 						$component_data[$key] = $log_message[2];
 					}
 					else {
-						// If a value was already added, store them as an array
+						// If a value was already added, store all of them as an array
 						if(!is_array($component_data[$key])) {
 							$value = $component_data[$key];
-							$component_data[$key] = array($value);
+							$component_data[$key] = array();
+							$component_data[$key][1] = $value;
 						}
 
+						$i = count($component_data[$key]) + 1;
 						$component_data[$key][] = $log_message[2];
 					}
 				}
