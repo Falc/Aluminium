@@ -49,6 +49,14 @@ class Route {
 	protected $values;
 
 	/**
+	 * When true, the `HTTPS` value must be `on`, or the `SERVER_PORT` must be 443.
+	 * When false, neither of those values may be present.  When null, it is ignored.
+	 *
+	 * @var bool
+	 */
+    protected $secure;
+
+	/**
 	 * The $path property converted to a regular expression, using the $params subpatterns.
 	 *
 	 * @var string
@@ -70,11 +78,12 @@ class Route {
 	 * @param	array	$params Map of param tokens to regex subpatterns.
 	 * @param	array	$values Default values for params.
 	 */
-	public function __construct($path, $method, $params, $values) {
+	public function __construct($path, $method, $params, $values, $secure) {
 		$this->path = $path;
 		$this->method = ($method === null) ? null : (array) $method;
 		$this->params = (array) $params;
 		$this->values = (array) $values;
+		$this->secure = ($secure === null) ? null : (bool) $secure;
 
 		$this->set_regex();
 	}
@@ -140,7 +149,9 @@ class Route {
 	 * @return	bool
 	 */
 	public function is_match($path, array $server) {
-		$is_match = $this->is_regex_match($path) && $this->is_method_match($server);
+		$is_match = $this->is_regex_match($path)
+				 && $this->is_method_match($server)
+				 && $this->is_secure_match($server);
 
 		if(!$is_match) {
 			return false;
@@ -186,6 +197,28 @@ class Route {
 
 		return true;
 	}
+
+	/**
+	 * Checks that the Route `$secure` matches the corresponding server values.
+	 *
+	 * @param array $server A copy of $_SERVER.
+	 * @return bool True on a match, false if not.
+	 */
+    public function is_secure_match($server) {
+		if($this->secure !== null) {
+			$is_secure = (isset($server['HTTPS']) && $server['HTTPS'] == 'on')
+					  || (isset($server['SERVER_PORT']) && $server['SERVER_PORT'] == 443);
+
+			if($this->secure == TRUE && !$is_secure) {
+				return false;
+			}
+
+			if($this->secure == FALSE && $is_secure) {
+				return false;
+			}
+		}
+		return true;
+    }
 
 }
 
