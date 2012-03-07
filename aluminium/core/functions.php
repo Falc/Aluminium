@@ -10,38 +10,31 @@
  */
 
 /**
- * Returns an instance of the specified component.
+ * Returns a component instance.
  *
- * This method looks for the $component. If the $class_file exists, it is included and an instance is created and returned.
+ * This method searches and processes the component's init.php file. An object instance could be returned.
  *
  * @param	string	$component	Name of the component to load.
- * @return	mixed	A component instance.
+ * @return	mixed	A component instance or null.
  */
 function load_component($component) {
-	$class = $component;
+	$init_file = ALUMINIUM_COMPONENTS.$component.'/init.php';
 
-	// If the class is not already included, do it
-	if(!class_exists($class, FALSE)) {
-		$class_file = ALUMINIUM_COMPONENTS.$class.'/'.$class.'.php';
-
-		// If the class file does not exist, stop the process
-		if(!file_exists($class_file)) {
-			die('Error: File "'.$class_file.'" can not be found.');
-		}
-
-		// Include the class file
-		require($class_file);
-
-		// Remove underscores, file names use them, class names don't
-		$class = str_replace('_', '', $class);
-
-		// If the class does not exist, stop the process
-		if(!class_exists($class, FALSE)) {
-			die('Error: Class "'.$class.'" can not be found.');
-		}
+	// If the init file does not exist, stop the process
+	if(!file_exists($init_file)) {
+		die('Error: File "'.ALUMINIUM_COMPONENTS.$component.'/init.php" does not exist or cannot be loaded.');
 	}
 
-	return new $class();
+	// Include the init file
+	$instance = include($init_file);
+
+	// If the init file returned an object, return it
+	if(is_object($instance)) {
+		return $instance;
+	}
+
+	// Else, return null
+	return null;
 }
 
 /**
