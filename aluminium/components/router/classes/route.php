@@ -78,7 +78,7 @@ class Route {
 	 * @param	array	$params Map of param tokens to regex subpatterns.
 	 * @param	array	$values Default values for params.
 	 */
-	public function __construct($path, $method, $params, $values, $secure) {
+	public function __construct($path, $method, $params, $values, $secure = FALSE) {
 		$this->path = $path;
 		$this->method = ($method === null) ? null : (array) $method;
 		$this->params = (array) $params;

@@ -12,30 +12,14 @@
 /**
  * The MVC component enables the use of the Model View Controller pattern in the app.
  *
- * This component includes a Router class for managing the url routing process.
- *
  * @package		Aluminium
  * @subpackage	Components
  */
 class MVC {
 	/**
 	 * MVC constructor.
-	 *
-	 * Defines some constants and loads the required configuration.
 	 */
 	public function __construct() {
-		if(!defined('ALUMINIUM_MVC')) {
-			define('APP_MODELS',		APP_PATH.'models/');
-			define('APP_CONTROLLERS',	APP_PATH.'controllers/');
-			define('APP_VIEWS',			APP_PATH.'views/');
-
-			define('ALUMINIUM_MVC',		TRUE);
-		}
-
-		// Include the class files needed by the component
-		require_once(ALUMINIUM_COMPONENTS.'mvc/classes/model.php');
-		require_once(ALUMINIUM_COMPONENTS.'mvc/classes/view.php');
-		require_once(ALUMINIUM_COMPONENTS.'mvc/classes/controller.php');
 	}
 
 	/**
@@ -43,11 +27,11 @@ class MVC {
 	 *
 	 * Since Controller is an abstract class, $name should refer to a class that extends it.
 	 *
-	 * @param	string	$name		The name of the class to instance.
-	 * @param	mixed	$parameters	A list of parameters or null if any.
+	 * @param	string	$controller_name	The name of the controller to load.
+	 * @param	mixed	$parameters			A list of parameters or null if any.
 	 */
-	public function load_controller($class, $parameters = null) {
-		$class_file = APP_CONTROLLERS.$class.'.php';
+	public function load_controller($controller_name, $parameters = null) {
+		$class_file = APP_CONTROLLERS.$controller_name.'_controller.php';
 
 		// If the class file does not exist, stop the process
 		if(!file_exists($class_file)) {
@@ -58,7 +42,10 @@ class MVC {
 		require_once($class_file);
 
 		// Remove underscores, file names use them, class names don't
-		$class = str_replace('_', '', $class);
+		$class = str_replace('_', '', $controller_name);
+
+		// Add the suffix controller to the class name
+		$class .= 'Controller';
 
 		// If the class does not exist, stop the process
 		if(!class_exists($class, FALSE)) {

@@ -30,21 +30,18 @@ class Router {
 	 *
 	 * Gets the routes from the configuration file.
 	 */
-	public function __construct() {
-		// Include the class files needed by the component
-		require_once(ALUMINIUM_COMPONENTS.'router/classes/route.php');
-
-		// [Debug log]
-		if(function_exists('write_debug_log')) {
-			write_debug_log('Router instance created successfully.', 'router');
-		}
-
-		// Load the configuration
-		$routes = require(APP_CONF.'routes_conf.php');
+	public function __construct($routes_file) {
+		// Load the configuration file
+		$routes = require($routes_file);
 		$this->routes = array();
 
 		foreach($routes as $route) {
 			$this->add($route);
+		}
+
+		// [Debug log]
+		if(function_exists('write_debug_log')) {
+			write_debug_log('Router instance created successfully.', 'router');
 		}
 
 		// [Debug log]
@@ -65,17 +62,21 @@ class Router {
 		if(!isset($data['path']) || is_null($data['path']) || empty($data['path'])) {
 			return;
 		}
+
 		$path = $data['path'];
 
+		// A method is required
 		if(!isset($data['method']) || is_null($data['method']) || empty($data['method'])) {
 			die('Route '.$data['path'].' method is not set, null or empty.');
 		}
+
 		$method = $data['method'];
 
 		$params = isset($data['params']) ? $data['params'] : null;
 		$values = isset($data['values']) ? $data['values'] : null;
+		$secure = isset($data['secure']) ? $data['secure'] : FALSE;
 
-		$route = new Route($path, $method, $params, $values);
+		$route = new Route($path, $method, $params, $values, $secure);
 		$this->routes[] = $route;
 	}
 

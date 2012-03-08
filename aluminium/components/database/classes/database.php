@@ -19,82 +19,136 @@
  */
 class Database {
 	/**
+	 * Database driver.
+	 *
+	 * It must match a PDO driver name: http://php.net/manual/en/pdo.drivers.php
+	 */
+	public $driver_name;
+
+	/**
+	 * Database hostname.
+	 *
+	 * @var string
+	 */
+	public $db_host;
+
+	/**
+	 * Database port.
+	 *
+	 * @var int
+	 */
+	public $db_port;
+
+	/**
+	 * Database name.
+	 *
+	 * @var string
+	 */
+	public $db_name;
+
+	/**
+	 * Database user.
+	 *
+	 * @var string
+	 */
+	public $db_user;
+
+	/**
+	 * Database password.
+	 *
+	 * @var string
+	 */
+	public $db_pass;
+
+	/**
 	 * Database constructor.
 	 *
-	 * Defines the drivers directory.
+	 * Loads a configuration file and instances a driver, if needed.
+	 *
+	 * @param	string	$conf_file		The configuration file.
+	 * @param	bool	$load_driver	Wether the constructor should instance the driver automatically.
 	 */
-	public function __construct() {
-		if(!defined('ALUMINIUM_DATABASE')) {
-			define('DB_DRIVERS_PATH',	dirname(__FILE__).'/drivers/');
+	public function __construct($conf_file) {
+		// Load the configuration file
+		$conf = require($conf_file);
 
-			define('ALUMINIUM_DATABASE',	TRUE);
 
-			// [Debug log]
-			if(function_exists('write_debug_log')) {
-				write_debug_log('Database instance created successfully.', 'database');
-			}
+		// If no driver was set, stop the process
+		if(!isset($conf['driver']) || empty($conf['driver'])) {
+			die('Error: No PDO driver was defined. Check your app\'s database_conf.php file.');
+		}
+
+		$this->driver_name = $conf['driver'];
+
+		// If the specified driver is not valid, stop the process
+		$available_drivers = PDO::getAvailableDrivers();
+		if(!in_array($this->driver_name, $available_drivers)) {
+			die('Error: The selected driver is not valid. Available drivers: '.implode(', ', $available_drivers).'.');
+		}
+
+		// Default values
+		$this->db_host = '127.0.0.1';
+		$this->db_port = null;
+		$this->db_name = 'default';
+		$this->db_user = 'nouser';
+		$this->db_pass = '';
+
+		// Set the host, if defined
+		if(isset($conf['host']) && !empty($conf['host'])) {
+			$this->db_host = $conf['host'];
+		}
+
+		// Set the port, if defined
+		if(isset($conf['port']) && !empty($conf['port'])) {
+			$this->db_port = $conf['port'];
+		}
+
+		// Set the database name, if defined
+		if(isset($conf['name']) && !empty($conf['name'])) {
+			$this->db_name = $conf['name'];
+		}
+
+		// Set the user, if defined
+		if(isset($conf['user']) && !empty($conf['user'])) {
+			$this->db_user = $conf['user'];
+		}
+
+		// Set the password, if defined
+		if(isset($conf['pass']) && !empty($conf['pass'])) {
+			$this->db_pass = $conf['pass'];
+		}
+
+		// [Debug log]
+		if(function_exists('write_debug_log')) {
+			write_debug_log('Database instance created successfully.', 'database');
 		}
 	}
 
 	/**
 	 * Loads a DatabaseDriver.
 	 *
-	 * This method will instance the corresponding DatabaseDriver for $driver_name. If $driver_name is not
-	 * specified, it will rely on the 'driver' option from the database configuration file.
-	 *
-	 * The driver name must match a PDO driver name: http://php.net/manual/en/pdo.drivers.php
-	 *
-	 * @param	string	$driver_name	A valid PDO driver name.
+	 * This method will instance the corresponding DatabaseDriver for $this->driver_name.
 	 */
-	public function load_driver($driver_name = null) {
-		// Load the configuration
-		$conf = require(APP_CONF.'database_conf.php');
-
-		$driver = (is_null($driver_name)) ? $conf['driver'] : $driver_name;
-
-		// If no driver was set, stop the process
-		if(!isset($driver) || empty($driver)) {
-			die('Error: No PDO driver was defined. Check your app\'s database_conf.php file.');
-		}
-
-		// If the specified driver is not valid, stop the process
-		$available_drivers = PDO::getAvailableDrivers();
-		if(!in_array($driver, $available_drivers)) {
-			die('Error: The selected driver is not valid. Available drivers: '.implode(', ', $available_drivers).'.');
-		}
-
+	public function load_driver() {
 		// If the specified driver file does not exist, stop the process
-		$driver_file = DB_DRIVERS_PATH.$driver.'_driver.php';
+		$driver_file = DB_DRIVERS_PATH.$this->driver_name.'_driver.php';
 		if(!file_exists($driver_file)) {
-			die('Error: File '.$driver.'_driver.php not found in '.DB_DRIVERS_PATH);
+			die('Error: File '.$driver_file.' does not exist or cannot be loaded.');
 		}
 
-		// Include the required driver class files
-		require_once(DB_DRIVERS_PATH.'database_driver.php');
+		// Include the driver class file
 		require_once($driver_file);
 
-		// If no host was set, use '127.0.0.1' as default
-		$db_host = (isset($conf['host']) && !empty($conf['host'])) ? $conf['host'] : '127.0.0.1';
-
-		// If no port was set or it isn't numeric, set null
-		$db_port = (isset($conf['port']) && is_numeric($conf['port'])) ? $conf['port'] : null;
-
-		$db_name = $conf['name'];
-		$db_user = $conf['user'];
-		$db_pass = $conf['pass'];
-
 		// Create the driver instance
-		$driver_class = $driver.'Driver';
-		$driver_instance = new $driver_class($db_host, $db_port, $db_name, $db_user, $db_pass);
-
-		// [Debug log]
-		if(function_exists('write_debug_log')) {
-			write_debug_log('[DatabaseDriver] '.$driver.' loaded successfully.', 'database');
-		}
-
-		return $driver_instance;
+		$driver_class = $this->driver_name.'Driver';
+		return new $driver_class(
+			$this->db_host,
+			$this->db_port,
+			$this->db_name,
+			$this->db_user,
+			$this->db_pass
+		);
 	}
-
 }
 
 ?>
