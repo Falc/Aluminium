@@ -1,16 +1,12 @@
 <?php
 
-/*
- * Required files
- */
+// Required files
 require_once(dirname(__FILE__).'/classes/mvc.php');
 require_once(dirname(__FILE__).'/classes/model.php');
 require_once(dirname(__FILE__).'/classes/controller.php');
 require_once(dirname(__FILE__).'/classes/view.php');
 
-/*
- * Constant definitions
- */
+// Constant definitions
 if(!defined('APP_MODELS')) {
 	define('APP_MODELS', APP_PATH.'models/');
 }
@@ -22,10 +18,5 @@ if(!defined('APP_CONTROLLERS')) {
 if(!defined('APP_VIEWS')) {
 	define('APP_VIEWS',	APP_PATH.'views/');
 }
-
-/*
- * Return an MVC instance
- */
-return new MVC();
 
 ?>
