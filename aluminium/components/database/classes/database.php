@@ -63,10 +63,9 @@ class Database {
 	/**
 	 * Database constructor.
 	 *
-	 * Loads a configuration file and instances a driver, if needed.
+	 * It sets the configuration option from $conf_file, if specified.
 	 *
-	 * @param	string	$conf_file		The configuration file.
-	 * @param	bool	$load_driver	Wether the constructor should instance the driver automatically.
+	 * @param	string	$conf_file	A configuration file.
 	 */
 	public function __construct($conf_file = null) {
 		// Default values
@@ -76,6 +75,7 @@ class Database {
 		$this->db_user = 'nouser';
 		$this->db_pass = '';
 
+		// Load the configuration file, if any
 		if(!is_null($conf_file)) {
 			$this->set_configuration_from_file($conf_file);
 		}
@@ -86,6 +86,11 @@ class Database {
 		}
 	}
 
+	/**
+	 * Sets all the properties from a configuration file.
+	 *
+	 * @param	string	$conf_file	A configuration file.
+	 */
 	public function set_configuration_from_file($conf_file) {
 		// Load the configuration file
 		$conf = require($conf_file);
@@ -130,9 +135,12 @@ class Database {
 	}
 
 	/**
-	 * Loads a DatabaseDriver.
+	 * Loads a DatabaseDriver instance.
 	 *
-	 * This method will instance the corresponding DatabaseDriver for $this->driver_name.
+	 * It can load the DatabaseDriver from $driver_name. When a $driver_name is not passed as parameter,
+	 * the method will rely on $this->driver_name.
+	 *
+	 * @param	string	A driver name.
 	 */
 	public function load_driver($driver_name = null) {
 		if(!is_null($driver_name)) {
