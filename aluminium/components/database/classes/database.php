@@ -19,7 +19,7 @@
  */
 class Database {
 	/**
-	 * Database driver.
+	 * Database driver name.
 	 *
 	 * It must match a PDO driver name: http://php.net/manual/en/pdo.drivers.php
 	 */
@@ -63,9 +63,9 @@ class Database {
 	/**
 	 * Database constructor.
 	 *
-	 * It sets the configuration option from $conf_file, if specified.
+	 * Sets the configuration option from $conf_file, if specified.
 	 *
-	 * @param	string	$conf_file	A configuration file.
+	 * @param	string	$conf_file	Name of the configuration file.
 	 */
 	public function __construct($conf_file = null) {
 		// Default values
@@ -89,7 +89,7 @@ class Database {
 	/**
 	 * Sets all the properties from a configuration file.
 	 *
-	 * @param	string	$conf_file	A configuration file.
+	 * @param	string	$conf_file	Name of the configuration file.
 	 */
 	public function set_configuration_from_file($conf_file) {
 		// Load the configuration file
@@ -97,7 +97,7 @@ class Database {
 
 		// If no driver was set, stop the process
 		if(!isset($conf['driver']) || empty($conf['driver'])) {
-			die('Error: No PDO driver was defined. Check your app\'s database_conf.php file.');
+			die('Error: No PDO driver was defined.');
 		}
 
 		$this->driver_name = $conf['driver'];
@@ -140,9 +140,10 @@ class Database {
 	 * It can load the DatabaseDriver from $driver_name. When a $driver_name is not passed as parameter,
 	 * the method will rely on $this->driver_name.
 	 *
-	 * @param	string	A driver name.
+	 * @param	string	Name of the driver to instance.
 	 */
 	public function load_driver($driver_name = null) {
+		// Overwrite $this->driver_name if a driver name has been specified
 		if(!is_null($driver_name)) {
 			$this->driver_name = $driver_name;
 		}
@@ -166,6 +167,7 @@ class Database {
 			$this->db_pass
 		);
 	}
+
 }
 
 ?>

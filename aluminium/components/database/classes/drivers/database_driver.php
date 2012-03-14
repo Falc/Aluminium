@@ -80,9 +80,15 @@ abstract class DatabaseDriver {
 	protected $params;
 
 	/**
-	 * Database constructor.
+	 * DatabaseDriver constructor.
 	 *
-	 * Loads the required configuration, checks it and finally instances the specified database driver.
+	 * Loads the required configuration and checks it.
+	 *
+	 * @param	string	$db_host	Database hostname.
+	 * @param	int		$db_port	Database port.
+	 * @param	string	$db_name	Database name.
+	 * @param	string	$db_user	Database user.
+	 * @param	string	$db_pass	Database password.
 	 */
 	public function __construct($db_host, $db_port, $db_name, $db_user, $db_pass) {
 		$this->db_host = $db_host;
