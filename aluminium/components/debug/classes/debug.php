@@ -172,6 +172,7 @@ class Debug {
 					$this->process_log($file);
 				}
 			}
+			closedir($dir_handle);
 		}
 	}
 
