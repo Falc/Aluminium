@@ -68,10 +68,27 @@ class Database {
 	 * @param	string	$conf_file		The configuration file.
 	 * @param	bool	$load_driver	Wether the constructor should instance the driver automatically.
 	 */
-	public function __construct($conf_file) {
+	public function __construct($conf_file = null) {
+		// Default values
+		$this->db_host = '127.0.0.1';
+		$this->db_port = null;
+		$this->db_name = 'default';
+		$this->db_user = 'nouser';
+		$this->db_pass = '';
+
+		if(!is_null($conf_file)) {
+			$this->set_configuration_from_file($conf_file);
+		}
+
+		// [Debug log]
+		if(function_exists('write_debug_log')) {
+			write_debug_log('Database instance created successfully.', 'database');
+		}
+	}
+
+	public function set_configuration_from_file($conf_file) {
 		// Load the configuration file
 		$conf = require($conf_file);
-
 
 		// If no driver was set, stop the process
 		if(!isset($conf['driver']) || empty($conf['driver'])) {
@@ -86,41 +103,29 @@ class Database {
 			die('Error: The selected driver is not valid. Available drivers: '.implode(', ', $available_drivers).'.');
 		}
 
-		// Default values
-		$this->db_host = '127.0.0.1';
-		$this->db_port = null;
-		$this->db_name = 'default';
-		$this->db_user = 'nouser';
-		$this->db_pass = '';
-
 		// Set the host, if defined
-		if(isset($conf['host']) && !empty($conf['host'])) {
+		if(isset($conf['host'])) {
 			$this->db_host = $conf['host'];
 		}
 
 		// Set the port, if defined
-		if(isset($conf['port']) && !empty($conf['port'])) {
+		if(isset($conf['port'])) {
 			$this->db_port = $conf['port'];
 		}
 
 		// Set the database name, if defined
-		if(isset($conf['name']) && !empty($conf['name'])) {
+		if(isset($conf['name'])) {
 			$this->db_name = $conf['name'];
 		}
 
 		// Set the user, if defined
-		if(isset($conf['user']) && !empty($conf['user'])) {
+		if(isset($conf['user'])) {
 			$this->db_user = $conf['user'];
 		}
 
 		// Set the password, if defined
-		if(isset($conf['pass']) && !empty($conf['pass'])) {
+		if(isset($conf['pass'])) {
 			$this->db_pass = $conf['pass'];
-		}
-
-		// [Debug log]
-		if(function_exists('write_debug_log')) {
-			write_debug_log('Database instance created successfully.', 'database');
 		}
 	}
 
@@ -129,7 +134,11 @@ class Database {
 	 *
 	 * This method will instance the corresponding DatabaseDriver for $this->driver_name.
 	 */
-	public function load_driver() {
+	public function load_driver($driver_name = null) {
+		if(!is_null($driver_name)) {
+			$this->driver_name = $driver_name;
+		}
+
 		// If the specified driver file does not exist, stop the process
 		$driver_file = DB_DRIVERS_PATH.$this->driver_name.'_driver.php';
 		if(!file_exists($driver_file)) {
