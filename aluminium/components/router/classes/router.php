@@ -65,12 +65,10 @@ class Router {
 
 		$path = $data['path'];
 
-		// A method is required
-		if(!isset($data['method']) || is_null($data['method']) || empty($data['method'])) {
-			$data['method'] = 'GET';
-			trigger_error('Method for route '.$data['path'].' is not set, null or empty.', E_USER_ERROR);
+		// If no method is specified, use null
+		if(!isset($data['method']) || empty($data['method'])) {
+			$data['method'] = null;
 		}
-
 		$method = $data['method'];
 
 		$params = isset($data['params']) ? $data['params'] : null;
