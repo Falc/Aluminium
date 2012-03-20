@@ -96,7 +96,7 @@ class Database {
 		$conf = require($conf_file);
 
 		// If no driver was set, stop the process
-		if(!isset($conf['driver']) || empty($conf['driver'])) {
+		if(empty($conf['driver'])) {
 			trigger_error('No PDO driver was defined.', E_USER_ERROR);
 		}
 
@@ -109,27 +109,27 @@ class Database {
 		}
 
 		// Set the host, if defined
-		if(isset($conf['host'])) {
+		if(!empty($conf['host'])) {
 			$this->db_host = $conf['host'];
 		}
 
 		// Set the port, if defined
-		if(isset($conf['port'])) {
+		if(!empty($conf['port'])) {
 			$this->db_port = $conf['port'];
 		}
 
 		// Set the database name, if defined
-		if(isset($conf['name'])) {
+		if(!empty($conf['name'])) {
 			$this->db_name = $conf['name'];
 		}
 
 		// Set the user, if defined
-		if(isset($conf['user'])) {
+		if(!empty($conf['user'])) {
 			$this->db_user = $conf['user'];
 		}
 
 		// Set the password, if defined
-		if(isset($conf['pass'])) {
+		if(!empty($conf['pass'])) {
 			$this->db_pass = $conf['pass'];
 		}
 	}

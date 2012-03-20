@@ -53,7 +53,7 @@ class Aluminium {
 		}
 
 		// Define the app's base_path
-		$base_path = isset($this->main_conf['base_path']) ? $this->main_conf['base_path'] : '/';
+		$base_path = !empty($this->main_conf['base_path']) ? $this->main_conf['base_path'] : '/';
 		define('APP_BASE_PATH', $base_path);
 	}
 

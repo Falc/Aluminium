@@ -53,7 +53,7 @@ class ArrayTranslateDriver extends TranslateDriver {
 	 * @param	string	$text	Text to translate.
 	 */
 	public function t($text) {
-		if(isset($this->source[$text])) {
+		if(!empty($this->source[$text])) {
 			return $this->source[$text];
 		}
 		else {

@@ -58,22 +58,17 @@ class Router {
 	public function add($data) {
 		$data = (array) $data;
 
-		// If path is not set, null or empty, ignore this route
-		if(!isset($data['path']) || is_null($data['path']) || empty($data['path'])) {
+		// If path is not set
+		if(empty($data['path'])) {
 			return;
 		}
 
 		$path = $data['path'];
 
-		// If no method is specified, use null
-		if(!isset($data['method']) || empty($data['method'])) {
-			$data['method'] = null;
-		}
-		$method = $data['method'];
-
-		$params = isset($data['params']) ? $data['params'] : null;
-		$values = isset($data['values']) ? $data['values'] : null;
-		$secure = isset($data['secure']) ? $data['secure'] : FALSE;
+		$method = !empty($data['method']) ? $data['method'] : null;
+		$params = !empty($data['params']) ? $data['params'] : null;
+		$values = !empty($data['values']) ? $data['values'] : null;
+		$secure = !empty($data['secure']) ? $data['secure'] : FALSE;
 
 		$route = new Route($path, $method, $params, $values, $secure);
 		$this->routes[] = $route;

@@ -75,17 +75,17 @@ class I18n {
 		$conf = require($conf_file);
 
 		// Set the driver, if defined
-		if(isset($conf['driver'])) {
+		if(!empty($conf['driver'])) {
 			$this->driver_name = $conf['driver'];
 		}
 
 		// Set the locale, if defined
-		if(isset($conf['locale'])) {
+		if(!empty($conf['locale'])) {
 			$this->locale = $conf['locale'];
 		}
 
 		// Set the codeset, if defined
-		if(isset($conf['codeset'])) {
+		if(!empty($conf['codeset'])) {
 			$this->codeset = $conf['codeset'];
 		}
 
