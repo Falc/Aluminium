@@ -85,14 +85,15 @@ class View {
 	 */
 	public function build() {
 		if(is_null($this->_template)) {
-			die('Template not asigned.');
+			trigger_error('Template is not defined.', E_USER_ERROR);
 		}
 
 		$template_name = !is_null($this->_theme) ? '' : $this->_theme;
 		$template_name .= $this->_template.'.php';
+		$template_file = APP_VIEWS.$template_name;
 
-		if(!file_exists(APP_VIEWS.$template_name)) {
-			die('Template not found: "'.$template_name.'".');
+		if(!file_exists($template_file)) {
+			trigger_error('Template '.$template_file.' does not exist or cannot be loaded.', E_USER_ERROR);
 		}
 
 		foreach ($this->_vars as $name => $value) {

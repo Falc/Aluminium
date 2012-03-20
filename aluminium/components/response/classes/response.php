@@ -178,7 +178,7 @@ class Response {
 
 		// If the status code does not appear in the statuses array, stop the process
 		if(!array_key_exists($code, $this->statuses)) {
-			die('Error: Status code '.$code.' not recongnized.');
+			trigger_error('Status code '.$code.' not recognized.', E_USER_ERROR);
 		}
 
 		$this->status_code = $code;

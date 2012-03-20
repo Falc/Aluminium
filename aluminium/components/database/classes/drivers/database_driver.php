@@ -135,8 +135,7 @@ abstract class DatabaseDriver {
 
 		}
 		catch(PDOException $error) {
-			echo $error->getMessage();
-			die;
+			trigger_error($error->getMessage, E_USER_ERROR);
 		}
 	}
 
@@ -348,7 +347,7 @@ abstract class DatabaseDriver {
 	public function execute() {
 		// If the query is null or empty, stop the process
 		if(is_null($this->query) || empty($this->query)) {
-			die('Error: there is no query to execute.');
+			trigger_error('There is no query to execute.', E_USER_NOTICE);
 		}
 
 		try {
@@ -408,7 +407,7 @@ abstract class DatabaseDriver {
 	public function fetch_all_as_class($class, $parameters = null) {
 		// If the class is not defined, stop the process
 		if(!class_exists($class, FALSE)) {
-			die('Error: class "'.$class.'" is not defined.');
+			trigger_error('Class '.$class.' is not defined.', E_USER_ERROR);
 		}
 
 		$this->statement->setFetchMode(PDO::FETCH_CLASS, $class, $parameters);
@@ -439,7 +438,7 @@ abstract class DatabaseDriver {
 	public function fetch_as_class($class, $parameters = null) {
 		// If the class is not defined, stop the process
 		if(!class_exists($class, FALSE)) {
-			die('Error: class "'.$class.'" is not defined.');
+			trigger_error('Class '.$driver_file.' is not defined.', E_USER_ERROR);
 		}
 
 		$this->statement->setFetchMode(PDO::FETCH_CLASS, $class, $parameters);

@@ -97,7 +97,7 @@ class Database {
 
 		// If no driver was set, stop the process
 		if(!isset($conf['driver']) || empty($conf['driver'])) {
-			die('Error: No PDO driver was defined.');
+			trigger_error('No PDO driver was defined.', E_USER_ERROR);
 		}
 
 		$this->driver_name = $conf['driver'];
@@ -105,7 +105,7 @@ class Database {
 		// If the specified driver is not valid, stop the process
 		$available_drivers = PDO::getAvailableDrivers();
 		if(!in_array($this->driver_name, $available_drivers)) {
-			die('Error: The selected driver is not valid. Available drivers: '.implode(', ', $available_drivers).'.');
+			trigger_error('The selected driver is not valid. Available drivers: '.implode(', ', $available_drivers).'.', E_USER_ERROR);
 		}
 
 		// Set the host, if defined
@@ -151,7 +151,7 @@ class Database {
 		// If the specified driver file does not exist, stop the process
 		$driver_file = DB_DRIVERS_PATH.$this->driver_name.'_driver.php';
 		if(!file_exists($driver_file)) {
-			die('Error: File '.$driver_file.' does not exist or cannot be loaded.');
+			trigger_error('File '.$driver_file.' does not exist or cannot be loaded.', E_USER_ERROR);
 		}
 
 		// Include the driver class file

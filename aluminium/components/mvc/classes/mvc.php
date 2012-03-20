@@ -35,7 +35,7 @@ class MVC {
 
 		// If the class file does not exist, stop the process
 		if(!file_exists($class_file)) {
-			die('Error: File "'.$class_file.'" not found.');
+			trigger_error('File '.$class_file.' does not exist or cannot be loaded.', E_USER_ERROR);
 		}
 
 		// Include the controller class file
@@ -49,7 +49,7 @@ class MVC {
 
 		// If the class does not exist, stop the process
 		if(!class_exists($class, FALSE)) {
-			die('Error: Class "'.$class.'" not found.');
+			trigger_error('Class '.$class.' is not defined.', E_USER_ERROR);
 		}
 
 		// Create the controller instance and set the parameters

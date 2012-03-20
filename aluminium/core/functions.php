@@ -21,7 +21,7 @@ function load_component($component) {
 
 	// If the init file does not exist, stop the process
 	if(!file_exists($init_file)) {
-		die('Error: File "'.ALUMINIUM_COMPONENTS.$component.'/init.php" does not exist or cannot be loaded.');
+		trigger_error('File "'.$init_file.'" does not exist or cannot be loaded.', E_USER_ERROR);
 	}
 
 	include($init_file);
@@ -53,7 +53,7 @@ function instance_component($component) {
 
 	// If the instance file does not exist, stop the process
 	if(!file_exists($instance_file)) {
-		die('Error: File "'.ALUMINIUM_COMPONENTS.$component.'/instance.php" does not exist or cannot be loaded.');
+		trigger_error('File "'.$instance_file.'" does not exist or cannot be loaded.', E_USER_ERROR);
 	}
 
 	$instance = include($instance_file);
@@ -106,12 +106,12 @@ function write_log($message, $log_filename = 'others', $log_directory = APP_LOGS
 
 	// Check whether the directory is writable
 	if(!is_writable($log_directory)) {
-		die('Error: "'.$log_directory.'" is not writable.');
+		trigger_error('Directory "'.$log_directory.'" does not exist or is not writable.', E_USER_ERROR);
 	}
 
 	// Check whether an existent file is writable
 	if(file_exists($log_file) && !is_writable($log_file)) {
-		die('Error: "'.$log_filename.'.log" is not writable.');
+		trigger_error('File "'.$log_filename.'.log" does not exist or is not writable.', E_USER_ERROR);
 	}
 
 	$output = "\n";

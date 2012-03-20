@@ -135,19 +135,13 @@ class I18n {
 		foreach($locales as $locale) {
 			$success = setlocale(LC_ALL, $locale);
 
-/* Uncomment this for locale testing
-			echo 'setlocale(LC_ALL, '.$locale.') => ';
-			echo ($success === FALSE) ? 'failed!' : 'worked!';
-			echo '<br />';
-*/
-
-			if($success != FALSE) {
+			if($success !== FALSE) {
 				return;
 			}
 		}
 
-		die('Error: It was not possible to set the locale information from locale "'.$this->locale.'" and codeset "'.$this->codeset.'".');
-			
+		// If no locale format worked, stop the process
+		trigger_error('Locale "'.$this->locale.'.'.$this->codeset.'" was not found.', E_USER_ERROR);
 	}
 
 	/**
@@ -166,13 +160,13 @@ class I18n {
 
 		// If driver name is null or empty, stop the process
 		if(is_null($this->driver_name) || empty($this->driver_name)) {
-			die('Error: No TranslateDriver was defined.');
+			trigger_error('No TranslateDriver was defined.', E_USER_ERROR);
 		}
 
 		// If the specified driver file does not exist, stop the process
 		$driver_file = dirname(__FILE__).'/drivers/'.$driver_name.'_translate_driver.php';
 		if(!file_exists($driver_file)) {
-			die('Error: File '.$driver_file.' does not exist or cannot be loaded.');
+			trigger_error('File '.$driver_file.' does not exist or cannot be loaded.', E_USER_ERROR);
 		}
 
 		// Include the driver class file
