@@ -56,7 +56,7 @@ class I18n {
 
 		// Load the configuration file, if any
 		if(!is_null($conf_file)) {
-			$this->set_configuration_from_file($conf_file);
+			$this->load_configuration_from_file($conf_file);
 		}
 
 		// [Debug log]
@@ -70,7 +70,7 @@ class I18n {
 	 *
 	 * @param	string	$conf_file	Name of the configuration file.
 	 */
-	public function set_configuration_from_file($conf_file) {
+	public function load_configuration_from_file($conf_file) {
 		// Load the configuration file
 		$conf = require($conf_file);
 

@@ -77,7 +77,7 @@ class Database {
 
 		// Load the configuration file, if any
 		if(!is_null($conf_file)) {
-			$this->set_configuration_from_file($conf_file);
+			$this->load_configuration_from_file($conf_file);
 		}
 
 		// [Debug log]
@@ -91,7 +91,7 @@ class Database {
 	 *
 	 * @param	string	$conf_file	Name of the configuration file.
 	 */
-	public function set_configuration_from_file($conf_file) {
+	public function load_configuration_from_file($conf_file) {
 		// Load the configuration file
 		$conf = require($conf_file);
 
