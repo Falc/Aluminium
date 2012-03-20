@@ -7,6 +7,7 @@ require_once(dirname(__FILE__).'/classes/controller.php');
 require_once(dirname(__FILE__).'/classes/view.php');
 
 // Constant definitions
+// APP_PATH (the root directory) must be defined
 if(!defined('APP_MODELS')) {
 	define('APP_MODELS', APP_PATH.'models/');
 }
