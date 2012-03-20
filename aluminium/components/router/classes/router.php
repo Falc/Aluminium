@@ -30,19 +30,33 @@ class Router {
 	 *
 	 * Gets the routes from the configuration file.
 	 */
-	public function __construct($routes_file) {
-		// Load the configuration file
-		$routes = require($routes_file);
+	public function __construct($routes_file = null) {
+		// Default values
 		$this->routes = array();
 
-		foreach($routes as $route) {
-			$this->add($route);
+		// Load the routes file, if any
+		if(!is_null($routes_file)) {
+			$this->load_routes_from_file($routes_file);
 		}
 
 		// [Debug log]
 		if(function_exists('write_debug_log')) {
 			write_debug_log('Router instance created successfully.', 'router');
 			write_debug_log(count($this->routes).' routes were added from the routes conf file.', 'router');
+		}
+	}
+
+	/**
+	 * Loads the routes from a file.
+	 *
+	 * @param	string	$routes_file	Name of the routes file.
+	 */
+	public function load_routes_from_file($routes_file) {
+		// Load the routes file
+		$routes = require($routes_file);
+
+		foreach($routes as $route) {
+			$this->add($route);
 		}
 	}
 
