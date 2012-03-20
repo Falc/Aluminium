@@ -148,8 +148,13 @@ class Database {
 			$this->driver_name = $driver_name;
 		}
 
+		// If driver name is empty, stop the process
+		if(empty($this->driver_name)) {
+			trigger_error('No DatabaseDriver was defined.', E_USER_ERROR);
+		}
+
 		// If the specified driver file does not exist, stop the process
-		$driver_file = DB_DRIVERS_PATH.$this->driver_name.'_driver.php';
+		$driver_file = dirname(__FILE__).'/drivers/'.$this->driver_name.'_driver.php';
 		if(!file_exists($driver_file)) {
 			trigger_error('File '.$driver_file.' does not exist or cannot be loaded.', E_USER_ERROR);
 		}

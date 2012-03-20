@@ -158,13 +158,13 @@ class I18n {
 			$this->driver_name = $driver_name;
 		}
 
-		// If driver name is null or empty, stop the process
-		if(is_null($this->driver_name) || empty($this->driver_name)) {
+		// If driver name is empty, stop the process
+		if(empty($this->driver_name)) {
 			trigger_error('No TranslateDriver was defined.', E_USER_ERROR);
 		}
 
 		// If the specified driver file does not exist, stop the process
-		$driver_file = dirname(__FILE__).'/drivers/'.$driver_name.'_translate_driver.php';
+		$driver_file = dirname(__FILE__).'/drivers/'.$this->driver_name.'_translate_driver.php';
 		if(!file_exists($driver_file)) {
 			trigger_error('File '.$driver_file.' does not exist or cannot be loaded.', E_USER_ERROR);
 		}
@@ -173,7 +173,7 @@ class I18n {
 		require_once($driver_file);
 
 		// Create the driver instance
-		$driver_class = $driver_name.'TranslateDriver';
+		$driver_class = $this->driver_name.'TranslateDriver';
 		return new $driver_class($this->locale);
 	}
 
