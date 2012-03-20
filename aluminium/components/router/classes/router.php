@@ -42,10 +42,6 @@ class Router {
 		// [Debug log]
 		if(function_exists('write_debug_log')) {
 			write_debug_log('Router instance created successfully.', 'router');
-		}
-
-		// [Debug log]
-		if(function_exists('write_debug_log')) {
 			write_debug_log(count($this->routes).' routes were added from the routes conf file.', 'router');
 		}
 	}
