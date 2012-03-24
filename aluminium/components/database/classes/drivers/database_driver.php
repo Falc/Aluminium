@@ -114,10 +114,8 @@ abstract class DatabaseDriver {
 
 	/**
 	 * Creates a PDO instance.
-	 *
-	 * @param	array	$conf	A list containing the database host, port, name, user and pass.
 	 */
-	abstract protected function create_pdo_instance($conf);
+	abstract protected function create_pdo_instance();
 
 	/**
 	 * Establishes a database connection.
@@ -149,7 +147,7 @@ abstract class DatabaseDriver {
 
 		}
 		catch(PDOException $error) {
-			trigger_error($error->getMessage, E_USER_ERROR);
+			trigger_error($error->getMessage(), E_USER_ERROR);
 		}
 	}
 
@@ -401,11 +399,11 @@ abstract class DatabaseDriver {
 					write_debug_log('[Parameter bound] '.$key.' => '.$param, 'database');
 				}
 
-				write_debug_log('[Rows affected] '.$this->statement->rowCount(), 'database');
+				write_debug_log('[Rows affected] '.$this->row_count, 'database');
 			}
 		}
 		catch(PDOException $error) {
-			echo $error->getMessage();
+			trigger_error($error->getMessage(), E_USER_ERROR);
 		}
 	}
 

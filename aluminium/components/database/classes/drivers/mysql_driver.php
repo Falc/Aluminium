@@ -19,11 +19,9 @@ class MySQLDriver extends DatabaseDriver {
 
 	/**
 	 * Creates a PDO instance using the MySQL driver.
-	 *
-	 * @param	array	$conf	A list containing the database host, port, name, user and pass.
 	 */
-	public function create_pdo_instance($conf) {
-		return new PDO('mysql:host='.$conf['host'].';dbname='.$conf['name'], $conf['user'], $conf['pass']);
+	public function create_pdo_instance() {
+		return new PDO('mysql:host='.$this->db_host.';dbname='.$this->db_name, $this->db_user, $this->db_pass);
 	}
 
 }
