@@ -66,6 +66,13 @@ abstract class DatabaseDriver {
 	protected $query;
 
 	/**
+	 * Type of the last SQL query.
+	 *
+	 * @var string
+	 */
+	protected $query_type;
+
+	/**
 	 * PDOStatement instance.
 	 *
 	 * @var PDOStatement
@@ -78,6 +85,13 @@ abstract class DatabaseDriver {
 	 * @var array
 	 */
 	protected $params;
+
+	/**
+	 * Number of rows affected by the last SQL statement.
+	 *
+	 * @var int
+	 */
+	protected $row_count;
 
 	/**
 	 * DatabaseDriver constructor.
@@ -168,6 +182,7 @@ abstract class DatabaseDriver {
 		$placeholders = substr($placeholders, 0, -1);
 
 		$this->query = 'INSERT INTO '.$table.' ('.$cols.') VALUES ('.$placeholders.')';
+		$this->query_type = 'INSERT';
 
 		return $this;
 	}
@@ -199,6 +214,7 @@ abstract class DatabaseDriver {
 		$data = substr($data, 0, -1);
 
 		$this->query = 'UPDATE '.$table.' SET '.$data;
+		$this->query_type = 'UPDATE';
 
 		return $this;
 	}
@@ -216,6 +232,7 @@ abstract class DatabaseDriver {
 		$this->clear();
 
 		$this->query = 'DELETE FROM '.$table;
+		$this->query_type = 'DELETE';
 
 		return $this;
 	}
@@ -234,6 +251,7 @@ abstract class DatabaseDriver {
 		$this->clear();
 
 		$this->query = 'SELECT '.$columns;
+		$this->query_type = 'SELECT';
 
 		return $this;
 	}
@@ -364,8 +382,16 @@ abstract class DatabaseDriver {
 			// Execute the statement
 			$this->statement->execute($this->params);
 
-			// Set the default fetch mode to PDO::FETCH_ASSOC
-			$this->statement->setFetchMode(PDO::FETCH_ASSOC);
+			if($this->query_type === 'SELECT') {
+				// Set the default fetch mode to PDO::FETCH_ASSOC
+				$this->statement->setFetchMode(PDO::FETCH_ASSOC);
+
+				// The method rowCount() is not reliable for select queries
+				$this->row_count = count($this->statement->fetchAll());
+			}
+			else {
+				$this->row_count = $this->statement->rowCount();
+			}
 
 			// [Debug log]
 			if(function_exists('write_debug_log')) {
@@ -381,6 +407,13 @@ abstract class DatabaseDriver {
 		catch(PDOException $error) {
 			echo $error->getMessage();
 		}
+	}
+
+	/**
+	 * Returns the number of rows affected by the last SQL statement.
+	 */
+	public function row_count() {
+		return $this->row_count;
 	}
 
 	/**
