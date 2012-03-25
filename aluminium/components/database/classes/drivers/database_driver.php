@@ -135,7 +135,7 @@ abstract class DatabaseDriver {
 		);
 
 		try {
-			$this->db_con = $this->create_pdo_instance($conf);
+			$this->db_con = $this->create_pdo_instance();
 
 			$this->db_con->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 			$this->db_con->exec('SET NAMES utf8');
@@ -384,7 +384,8 @@ abstract class DatabaseDriver {
 				// Set the default fetch mode to PDO::FETCH_ASSOC
 				$this->statement->setFetchMode(PDO::FETCH_ASSOC);
 
-				// The method rowCount() is not reliable for select queries, so use 0 and let the user count them
+				// The method rowCount() is not reliable for select queries, so 0 is used as a default value
+				// and the user should count them manually, by using the count() function
 				$this->row_count = 0;
 			}
 			else {
@@ -408,7 +409,11 @@ abstract class DatabaseDriver {
 	}
 
 	/**
-	 * Returns the number of rows affected by the last SQL statement.
+	 * Returns the number of rows affected by the last INSERT, UPDATE or DELETE query.
+	 *
+	 * This SHOULD NOT be used to get the number of rows returned by a SELECT query, since it will return 0.
+	 * SELECT queries are performed for getting some data, so you will fetch them. Then you can use the count()
+	 * function, perform a SELECT COUNT(*) or a similar query.
 	 */
 	public function row_count() {
 		return $this->row_count;
@@ -469,7 +474,7 @@ abstract class DatabaseDriver {
 	public function fetch_as_class($class, $parameters = null) {
 		// If the class is not defined, stop the process
 		if(!class_exists($class, FALSE)) {
-			trigger_error('Class '.$driver_file.' is not defined.', E_USER_ERROR);
+			trigger_error('Class '.$class.' is not defined.', E_USER_ERROR);
 		}
 
 		$this->statement->setFetchMode(PDO::FETCH_CLASS, $class, $parameters);
