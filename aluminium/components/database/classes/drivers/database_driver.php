@@ -68,7 +68,7 @@ abstract class DatabaseDriver {
 	/**
 	 * Type of the last SQL query.
 	 *
-	 * @var string
+	 * @var int
 	 */
 	protected $query_type;
 
@@ -87,7 +87,7 @@ abstract class DatabaseDriver {
 	protected $params;
 
 	/**
-	 * Number of rows affected by the last SQL statement.
+	 * Number of rows affected by the last INSERT, UPDATE or DELETE query.
 	 *
 	 * @var int
 	 */
@@ -180,7 +180,7 @@ abstract class DatabaseDriver {
 		$placeholders = substr($placeholders, 0, -1);
 
 		$this->query = 'INSERT INTO '.$table.' ('.$cols.') VALUES ('.$placeholders.')';
-		$this->query_type = 'INSERT';
+		$this->query_type = QueryType::INSERT;
 
 		return $this;
 	}
@@ -212,7 +212,7 @@ abstract class DatabaseDriver {
 		$data = substr($data, 0, -1);
 
 		$this->query = 'UPDATE '.$table.' SET '.$data;
-		$this->query_type = 'UPDATE';
+		$this->query_type = QueryType::UPDATE;
 
 		return $this;
 	}
@@ -230,7 +230,7 @@ abstract class DatabaseDriver {
 		$this->clear();
 
 		$this->query = 'DELETE FROM '.$table;
-		$this->query_type = 'DELETE';
+		$this->query_type = QueryType::DELETE;
 
 		return $this;
 	}
@@ -249,7 +249,7 @@ abstract class DatabaseDriver {
 		$this->clear();
 
 		$this->query = 'SELECT '.$columns;
-		$this->query_type = 'SELECT';
+		$this->query_type = QueryType::SELECT;
 
 		return $this;
 	}
@@ -380,12 +380,12 @@ abstract class DatabaseDriver {
 			// Execute the statement
 			$this->statement->execute($this->params);
 
-			if($this->query_type === 'SELECT') {
+			if($this->query_type === QueryType::SELECT) {
 				// Set the default fetch mode to PDO::FETCH_ASSOC
 				$this->statement->setFetchMode(PDO::FETCH_ASSOC);
 
-				// The method rowCount() is not reliable for select queries
-				$this->row_count = count($this->statement->fetchAll());
+				// The method rowCount() is not reliable for select queries, so use 0 and let the user count them
+				$this->row_count = 0;
 			}
 			else {
 				$this->row_count = $this->statement->rowCount();
