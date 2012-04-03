@@ -40,9 +40,9 @@ class Router {
 		}
 
 		// [Debug log]
-		if(function_exists('write_debug_log')) {
-			write_debug_log('Router instance created successfully.', 'router');
-			write_debug_log(count($this->routes).' routes were added from the routes conf file.', 'router');
+		if(defined('DEBUG_FILE')) {
+			$output = "\n".'[router->num_routes_loaded] '.count($this->routes);
+			file_put_contents(DEBUG_FILE, $output, FILE_APPEND);
 		}
 	}
 
@@ -93,33 +93,40 @@ class Router {
 	 */
 	public function match($path, array $server) {
 		// [Debug log]
-		if(function_exists('write_debug_log')) {
-			write_debug_log('[Request path] '.$path, 'router');
+		if(defined('DEBUG_FILE')) {
+			$output = "\n".'[router->request_path] '.$path;
+			file_put_contents(DEBUG_FILE, $output, FILE_APPEND);
 		}
 
 		foreach($this->routes as $route) {
 			if($route->is_match($path, $server)) {
 				// [Debug log]
-				if(function_exists('write_debug_log')) {
-					write_debug_log('[Route matched] '.$route->path, 'router');
-					write_debug_log('[Request method] '.$server['REQUEST_METHOD'], 'router');
+				if(defined('DEBUG_FILE')) {
+					$output = "\n".'[router->route_matched] True';
+					$output .= "\n".'[router->route_match->path] '.$route->path;
+					$output .= "\n".'[router->route_match->request_method] '.$server['REQUEST_METHOD'];
 
 					foreach($route->params as $key=>$value) {
-						write_debug_log('[Parameter] '.$key.' => '.$value, 'router');
+						$output .= "\n".'[router->route_match->parameter] '.$key.' => '.$value;
 					}
 
 					foreach($route->values as $key=>$value) {
-						write_debug_log('[Value] '.$key.' => '.$value, 'router');
+						$output .= "\n".'[router->route_match->value] '.$key.' => '.$value;
 					}
+
+					file_put_contents(DEBUG_FILE, $output, FILE_APPEND);
 				}
+
 				return $route;
 			}
 		}
 
 		// [Debug log]
-		if(function_exists('write_debug_log')) {
-			write_debug_log('No route matches '.$path, 'router');
+		if(defined('DEBUG_FILE')) {
+			$output = "\n".'[router->route_matched] False';
+			file_put_contents(DEBUG_FILE, $output, FILE_APPEND);
 		}
+
 		return null;
 	}
 

@@ -80,10 +80,6 @@ class Database {
 			$this->load_configuration_from_file($conf_file);
 		}
 
-		// [Debug log]
-		if(function_exists('write_debug_log')) {
-			write_debug_log('Database instance created successfully.', 'database');
-		}
 	}
 
 	/**

@@ -30,7 +30,7 @@ class Aluminium {
 		define('ALUMINIUM_CORE',		ALUMINIUM_PATH.'core/');
 		define('ALUMINIUM_COMPONENTS',	ALUMINIUM_PATH.'components/');
 
-		// Define the app's full path
+		// Define the app's main paths
 		define('APP_PATH',		$path.'/');
 		define('APP_CONF',		APP_PATH.'conf/');
 		define('APP_LOGS',		APP_PATH.'logs/');
@@ -48,8 +48,14 @@ class Aluminium {
 		$debug_mode = ($this->main_conf['debug_mode'] === TRUE);
 		define('DEBUG_MODE', $debug_mode);
 
-		if($debug_mode === TRUE) {
-			start_debug_mode();
+		if(DEBUG_MODE === TRUE) {
+			if(!defined('DEBUG_FILE')) {
+				$tmpfile = stream_get_meta_data(tmpfile());
+				define('DEBUG_FILE', $tmpfile['uri']);
+			}
+
+			error_reporting(E_ALL);
+			ini_set('display_errors', 1);
 		}
 
 		// Define the app's base_path

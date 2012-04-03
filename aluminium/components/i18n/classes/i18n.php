@@ -58,11 +58,6 @@ class I18n {
 		if(!is_null($conf_file)) {
 			$this->load_configuration_from_file($conf_file);
 		}
-
-		// [Debug log]
-		if(function_exists('write_debug_log')) {
-			write_debug_log('I18n instance created successfully.', 'database');
-		}
 	}
 
 	/**
