@@ -31,14 +31,14 @@ class Debug {
 	 *
 	 * @var array
 	 */
-	public $data;
+	protected $data;
 
 	/**
 	 * Tells whether the debug process is running or not.
 	 *
 	 * @var bool
 	 */
-	public $is_running;
+	protected $is_running;
 
 	/**
 	 * Debug constructor.
@@ -59,10 +59,10 @@ class Debug {
 			return;
 		}
 
-		$this->data['core']['memory_usage'] = memory_get_usage();
-
 		$start_time = microtime(true);
-		$this->data['core']['start_time'] = $start_time;
+		$this->data['core']['time']['start'] = $start_time;
+
+		$this->data['core']['memory']['usage'] = memory_get_usage();
 
 		$this->is_running = TRUE;
 	}
@@ -78,101 +78,74 @@ class Debug {
 
 		// The real_memory_usage info only works for PHP >= 5.2.0
 		if(version_compare(phpversion(), '5.2.0') >= 0) {
-			$this->data['core']['real_memory_usage'] = memory_get_usage(true).' bytes.';
+			$this->data['core']['memory']['real_usage'] = memory_get_usage(true).' bytes.';
 		}
 
 		$stop_memory_usage = memory_get_usage();
-		$start_memory_usage = $this->data['core']['memory_usage'];
-
-		$stop_time = microtime(true);
-		$this->data['core']['stop_time'] = $stop_time;
+		$start_memory_usage = $this->data['core']['memory']['usage'];
 
 		$memory_usage = $stop_memory_usage - $start_memory_usage;
-		$this->data['core']['memory_usage'] = $memory_usage.' bytes.';
+		$this->data['core']['memory']['usage'] = $memory_usage.' bytes.';
 
-		$start_time = $this->data['core']['start_time'];
+		$stop_time = microtime(true);
+		$this->data['core']['time']['stop'] = $stop_time;
+
+		$start_time = $this->data['core']['time']['start'];
 		$execution_time = $stop_time - $start_time;
-		$this->data['core']['execution_time'] = $execution_time.' seconds.';
-
-		$this->process_logs();
+		$this->data['core']['time']['execution'] = $execution_time.' seconds.';
 
 		$this->is_running = FALSE;
 	}
 
 	/**
-	 * Processes a single log file.
+	 * Processes a file containing debug info.
 	 *
-	 * This method gets only the relevant log lines and adds them to the $data array.
-	 * A relevant line will match the following format:
-	 * [Key name] Some message text
+	 * A valid debug line will match the following format:
+	 * [key1->key2->key3] Some message text or value.
 	 *
-	 * @param	string	$log_file_name	Name of the log file to process.
+	 * It can contain any number of keys as long as they are "connected" with '->' like a class instance:
+	 * [singlekey] Some value.
+	 * [you->age] 32
+	 * [core->time->execution] 0.074459075927734 seconds.
+	 *
+	 * @param	string	$file_name	Name of the file to process.
 	 */
-	public function process_log($log_file_name) {
-		$component_data = array();
+	public function process_file($file_name) {
+		// If the file does not exist, stop the process
+		if(!file_exists($file_name)) {
+			trigger_error('File "'.$file_name.'" does not exist or cannot be loaded.', E_USER_ERROR);
+		}
+
+		$data = array();
 
 		// Get the log file contents
-		$log_file = file(APP_LOGS.$log_file_name, FILE_SKIP_EMPTY_LINES);
+		$file = file($file_name, FILE_SKIP_EMPTY_LINES);
 
-		foreach($log_file as $line) {
-			// Split each line into two parts: timestamp and message
-			$log_content = explode(' | ', $line);
+		foreach($file as $line) {
+			$matches = array();
 
-			// Split the timestamp into "normal date" and "miliseconds"
-			$log_timestamp = array();
-			$log_timestamp[] = substr($log_content[0], 0, -5); // i.e: Feb 22 22:38:35
-			$log_timestamp[] = substr($log_content[0], -4);    // i.e: 0.323
+			// Process only the lines that match the format
+			if(preg_match('/\[(\w+(->\w+)*)\][ \t]*(.+)/', $line, $matches)) {
+				$key = trim($matches[1]);
+				$value = trim($matches[3]);
+				$value = empty($value) ? null : $value;
 
-			// Build the complete timestamp, including miliseconds
-			$timestamp = floatval(strtotime($log_timestamp[0]).$log_timestamp[1]);
+				$key_names = explode('->', $key);
 
-			// Process the lines with a timestamp greater than the start time
-			if($timestamp > $this->data['core']['start_time']) {
-				$log_message = array();
+				// By reversing the key names, it gets easier to build the multilevel associative array
+				$key_names = array_reverse($key_names);
+				$array = $value;
 
-				// Process the relevant lines
-				if(preg_match('/\[([^]]*)\] (.*)/', $log_content[1], $log_message)) {
-					// Convert from 'Key name' to 'key_name'
-					$key = strtolower(str_replace(' ', '_', $log_message[1]));
-
-					// Add the content to the $component_data array
-					if(!array_key_exists($key, $component_data)) {
-						$component_data[$key] = $log_message[2];
-					}
-					else {
-						// If a value was already added, store all of them as an array
-						if(!is_array($component_data[$key])) {
-							$value = $component_data[$key];
-							$component_data[$key] = array();
-							$component_data[$key][1] = $value;
-						}
-
-						$i = count($component_data[$key]) + 1;
-						$component_data[$key][] = $log_message[2];
-					}
+				foreach($key_names as $key_name) {
+					$array = array(
+						$key_name => $array
+					);
 				}
-			}
-		}
 
-		// Add the processed $component_data to the $data array
-		if(!empty($component_data)) {
-			$component_name = substr($log_file_name, 0, -4);
-			$this->data[$component_name] = $component_data;
-		}
-	}
-
-	/**
-	 * Processes all the .log files in the logs directory
-	 */
-	public function process_logs() {
-		if($dir_handle = opendir(APP_LOGS)) {
-			// Run process_log() for every .log file
-			while(($file = readdir($dir_handle)) !== FALSE) {
-				if(pathinfo($file, PATHINFO_EXTENSION) === 'log') {
-					$this->process_log($file);
-				}
+				// Merge the resulting array with $this->data
+				// If the input arrays have the same keys, then their values are merged together into an array
+				$this->data = array_merge_recursive($this->data, $array);
 			}
-			closedir($dir_handle);
 		}
 	}
 
