@@ -41,7 +41,7 @@ class Router {
 
 		// [Debug log]
 		if(defined('DEBUG_FILE')) {
-			$output = "\n".'[router->num_routes_loaded] '.count($this->routes);
+			$output = '[router->num_routes_loaded] '.count($this->routes)."\n";
 			file_put_contents(DEBUG_FILE, $output, FILE_APPEND);
 		}
 	}
@@ -94,7 +94,7 @@ class Router {
 	public function match($path, array $server) {
 		// [Debug log]
 		if(defined('DEBUG_FILE')) {
-			$output = "\n".'[router->request_path] '.$path;
+			$output = '[router->request_path] '.$path."\n";
 			file_put_contents(DEBUG_FILE, $output, FILE_APPEND);
 		}
 
@@ -102,16 +102,16 @@ class Router {
 			if($route->is_match($path, $server)) {
 				// [Debug log]
 				if(defined('DEBUG_FILE')) {
-					$output = "\n".'[router->route_matched] True';
-					$output .= "\n".'[router->route_match->path] '.$route->path;
-					$output .= "\n".'[router->route_match->request_method] '.$server['REQUEST_METHOD'];
+					$output = '[router->route_matched] True'."\n";
+					$output .= '[router->route_match->path] '.$route->path."\n";
+					$output .= '[router->route_match->request_method] '.$server['REQUEST_METHOD']."\n";
 
 					foreach($route->params as $key=>$value) {
-						$output .= "\n".'[router->route_match->parameter] '.$key.' => '.$value;
+						$output .= '[router->route_match->parameter] '.$key.' => '.$value."\n";
 					}
 
 					foreach($route->values as $key=>$value) {
-						$output .= "\n".'[router->route_match->value] '.$key.' => '.$value;
+						$output .= '[router->route_match->value] '.$key.' => '.$value."\n";
 					}
 
 					file_put_contents(DEBUG_FILE, $output, FILE_APPEND);
@@ -123,7 +123,7 @@ class Router {
 
 		// [Debug log]
 		if(defined('DEBUG_FILE')) {
-			$output = "\n".'[router->route_matched] False';
+			$output = '[router->route_matched] False'."\n";
 			file_put_contents(DEBUG_FILE, $output, FILE_APPEND);
 		}
 

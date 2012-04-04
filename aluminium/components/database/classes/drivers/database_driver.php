@@ -142,11 +142,11 @@ abstract class DatabaseDriver {
 
 			// [Debug log]
 			if(defined('DEBUG_FILE')) {
-				$output = "\n".'[database->connection->driver] '.$this->db_con->getAttribute(PDO::ATTR_DRIVER_NAME);
-				$output .= "\n".'[database->connection->host] '.$this->db_host;
-				$output .= "\n".'[database->connection->port] '.$this->db_port;
-				$output .= "\n".'[database->connection->db_name] '.$this->db_name;
-				$output .= "\n".'[database->connection->user] '.$this->db_user;
+				$output = '[database->connection->driver] '.$this->db_con->getAttribute(PDO::ATTR_DRIVER_NAME)."\n";
+				$output .= '[database->connection->host] '.$this->db_host."\n";
+				$output .= '[database->connection->port] '.$this->db_port."\n";
+				$output .= '[database->connection->db_name] '.$this->db_name."\n";
+				$output .= '[database->connection->user] '.$this->db_user."\n";
 				file_put_contents(DEBUG_FILE, $output, FILE_APPEND);
 			}
 
@@ -399,14 +399,14 @@ abstract class DatabaseDriver {
 
 			// [Debug log]
 			if(defined('DEBUG_FILE')) {
-				$output = "\n".'[database->query_executed->query] '.$this->query;
+				$output = '[database->query_executed->query] '.$this->query."\n";
 
 				foreach($this->params as $key=>$param) {
-					$output .= "\n".'[database->query_executed->parameter_bound] '.$key.' => '.$param;
+					$output .= '[database->query_executed->parameter_bound] '.$key.' => '.$param."\n";
 				}
 
 				if($this->query_type !== QueryType::SELECT) {
-					$output = "\n".'[database->query_executed->affected_rows] '.$this->row_count;
+					$output = '[database->query_executed->affected_rows] '.$this->row_count."\n";
 				}
 
 				file_put_contents(DEBUG_FILE, $output, FILE_APPEND);
