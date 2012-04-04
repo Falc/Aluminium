@@ -55,7 +55,7 @@ class I18n {
 		$this->codeset = 'UTF-8';
 
 		// Load the configuration file, if any
-		if(!is_null($conf_file)) {
+		if(!empty($conf_file)) {
 			$this->load_configuration_from_file($conf_file);
 		}
 	}

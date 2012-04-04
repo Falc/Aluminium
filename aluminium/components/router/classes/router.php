@@ -35,7 +35,7 @@ class Router {
 		$this->routes = array();
 
 		// Load the routes file, if any
-		if(!is_null($routes_file)) {
+		if(!empty($routes_file)) {
 			$this->load_routes_from_file($routes_file);
 		}
 

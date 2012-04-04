@@ -76,7 +76,7 @@ class Database {
 		$this->db_pass = '';
 
 		// Load the configuration file, if any
-		if(!is_null($conf_file)) {
+		if(!empty($conf_file)) {
 			$this->load_configuration_from_file($conf_file);
 		}
 

@@ -288,7 +288,7 @@ abstract class DatabaseDriver {
 	 */
 	public function where($clauses = null) {
 		// If there are no clauses, just ignore the WHERE part
-		if(is_null($clauses) || empty($clauses)) {
+		if(empty($clauses)) {
 			return;
 		}
 
@@ -367,7 +367,7 @@ abstract class DatabaseDriver {
 	 */
 	public function execute() {
 		// If the query is null or empty, stop the process
-		if(is_null($this->query) || empty($this->query)) {
+		if(empty($this->query)) {
 			trigger_error('There is no query to execute.', E_USER_NOTICE);
 		}
 
