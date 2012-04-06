@@ -98,9 +98,9 @@ class Debug {
 	}
 
 	/**
-	 * Processes a file containing debug info.
+	 * Processes an array of strings that contain debug info.
 	 *
-	 * A valid debug line will match the following format:
+	 * A valid debug string will match the following format:
 	 * [key1->key2->key3] Some message text or value.
 	 *
 	 * It can contain any number of keys as long as they are "connected" with '->' like a class instance:
@@ -108,27 +108,19 @@ class Debug {
 	 * [you->age] 32
 	 * [core->time->execution] 0.074459075927734 seconds.
 	 *
-	 * @param	string	$file_name	Name of the file to process.
+	 * @param	array	$data	An array of strings that contain debug info.
 	 */
-	public function process_file($file_name) {
-		// If the file does not exist, stop the process
-		if(!file_exists($file_name)) {
-			trigger_error('File "'.$file_name.'" does not exist or cannot be loaded.', E_USER_ERROR);
-		}
+	public function process_data($data) {
+		$processed_data = array();
 
-		$data = array();
-
-		// Get the log file contents
-		$file = file($file_name, FILE_SKIP_EMPTY_LINES);
-
-		foreach($file as $line) {
+		foreach($data as $string) {
 			$matches = array();
 
 			// Process only the lines that match the format
-			if(preg_match('/\[(\w+(->\w+)*)\][ \t]*(.+)/', $line, $matches)) {
+			if(preg_match('/\[(\w+(->\w+)*)\][ \t]*(.+)/', $string, $matches)) {
 				$key = trim($matches[1]);
 				$value = trim($matches[3]);
-				$value = empty($value) ? null : $value;
+				$value = is_null($value) ? null : $value;
 
 				$key_names = explode('->', $key);
 
@@ -142,11 +134,44 @@ class Debug {
 					);
 				}
 
-				// Merge the resulting array with $this->data
-				// If the input arrays have the same keys, then their values are merged together into an array
-				$this->data = array_merge_recursive($this->data, $array);
+				// Merge the resulting array with $processed_data
+				$processed_data = $this->merge_data($processed_data, $array);
 			}
 		}
+
+		return $processed_data;
+	}
+
+	/**
+	 * Processes a file containing debug info.
+	 *
+	 * @param	string	$file_name	Name of the file to process.
+	 */
+	public function process_file($file_name) {
+		// If the file does not exist, stop the process
+		if(!file_exists($file_name)) {
+			trigger_error('File "'.$file_name.'" does not exist or cannot be loaded.', E_USER_ERROR);
+		}
+
+		// Get the log file contents
+		$file = file($file_name, FILE_SKIP_EMPTY_LINES);
+
+		$processed_data = $this->process_data($file);
+
+		// Merge the resulting array with $this->data
+		$this->data = $this->merge_data($this->data, $processed_data);
+	}
+
+	/**
+	 * Merges two arrays containing data.
+	 *
+	 * If both arrays have the same keys, their values are merged together into an array.
+	 *
+	 * @param	array	$array1	An array.
+	 * @param	array	$array2	Another array.
+	 */
+	public function merge_data($array1, $array2) {
+		return array_merge_recursive($array1, $array2);
 	}
 
 	/**
