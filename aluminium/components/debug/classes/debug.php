@@ -34,7 +34,7 @@ class Debug {
 	protected $data;
 
 	/**
-	 * Tells whether the debug process is running or not.
+	 * Determines whether the debug process is running.
 	 *
 	 * @var bool
 	 */
@@ -48,6 +48,13 @@ class Debug {
 	public function __construct() {
 		$this->data = array();
 		$this->is_running = FALSE;
+	}
+
+	/**
+	 * Determines whether the debug process is running.
+	 */
+	public function is_running() {
+		return $this->is_running;
 	}
 
 	/**
