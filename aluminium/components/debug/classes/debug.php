@@ -192,18 +192,31 @@ class Debug {
 	public function format_data($name, $data) {
 		$output = '';
 
-		// If $data is a single element, return it
+		// $data is a single element
 		if(!is_array($data)) {
-			return $name.': '.$data;
+			// Return an empty string when empty, else concatenate $name and $data
+			return ($data == '') ? '' : $name.': '.$data;
 		}
-		// If $data is an array, run format_data() recursively
+		// $data is an array
 		else {
+			// Return an empty string if the array is empty
+			if(empty($data)) {
+				return '';
+			}
+
+			// Add the $name if it is not null (only the root node will be null)
 			if(!is_null($name)) {
 				$output .= $name.':'."\n";
 			}
 
 			$output .= '<ul>'."\n";
 			foreach($data as $name=>$content) {
+				// If $content is null or an empty array, ignore it
+				if(is_null($content) || (is_array($content) && empty($content))) {
+					continue;
+				}
+
+				// Run format_data() recursively for the element
 				$output .= '<li>'.$this->format_data($name, $content).'</li>'."\n";
 			}
 			$output .= '</ul>'."\n";
