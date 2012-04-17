@@ -21,7 +21,7 @@ class I18n {
 	 *
 	 * @var string
 	 */
-	public $driver_name;
+	protected $driver_name;
 
 	/**
 	 * Lang path.
@@ -69,6 +69,56 @@ class I18n {
 	}
 
 	/**
+	 * Gets the driver name.
+	 *
+	 * @return string
+	 */
+	public function get_driver_name() {
+		return $this->driver_name;
+	}
+
+	/**
+	 * Sets the driver name.
+	 *
+	 * @param	string	$driver_name	Driver name.
+	 */
+	public function set_driver_name($driver_name) {
+		$this->driver_name = $driver_name;
+	}
+
+	/**
+	 * Gets the lang path.
+	 *
+	 * @return string
+	 */
+	public function get_lang_path() {
+		return $this->lang_path;
+	}
+
+	/**
+	 * Sets the lang path.
+	 *
+	 * @param	string	$lang_path	Lang path.
+	 */
+	public function set_lang_path($lang_path) {
+		// If the directory does not exist or cannot be accessed, stop the process
+		if(!is_dir($lang_path)) {
+			trigger_error('Directory "'.$lang_path.'" does not exist or cannot be accessed.', E_USER_ERROR);
+		}
+
+		$this->lang_path = $lang_path;
+	}
+
+	/**
+	 * Gets the locale name.
+	 *
+	 * @return string
+	 */
+	public function get_locale() {
+		return $this->locale;
+	}
+
+	/**
 	 * Sets the locale name.
 	 *
 	 * The method apply_local() is called automatically.
@@ -78,6 +128,15 @@ class I18n {
 	public function set_locale($locale) {
 		$this->locale = $locale;
 		$this->apply_locale();
+	}
+
+	/**
+	 * Gets the codeset name.
+	 *
+	 * @return string
+	 */
+	public function get_codeset() {
+		return $this->codeset;
 	}
 
 	/**

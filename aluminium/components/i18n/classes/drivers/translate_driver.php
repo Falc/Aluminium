@@ -58,6 +58,33 @@ abstract class TranslateDriver {
 	}
 
 	/**
+	 * Gets the source.
+	 *
+	 * @return array
+	 */
+	public function get_source() {
+		return $this->source;
+	}
+
+	/**
+	 * Gets the lang path.
+	 *
+	 * @return string
+	 */
+	public function get_lang_path() {
+		return $this->lang_path;
+	}
+
+	/**
+	 * Gets the locale name.
+	 *
+	 * @return string
+	 */
+	public function get_locale() {
+		return $this->locale;
+	}
+
+	/**
 	 * Loads a single language file.
 	 *
 	 * @param	string	$file_name	Name of the language file.
