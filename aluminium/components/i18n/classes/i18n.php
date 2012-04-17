@@ -55,7 +55,7 @@ class I18n {
 	 *
 	 * @param	string	$conf_file	Name of the configuration file.
 	 */
-	public function __construct($conf_file = null) {
+	public function __construct($conf = null) {
 		// Default values
 		$this->driver_name = null;
 		$this->lang_path = null;
@@ -63,8 +63,8 @@ class I18n {
 		$this->codeset = 'UTF-8';
 
 		// Load the configuration file, if any
-		if(!empty($conf_file)) {
-			$this->load_configuration_from_file($conf_file);
+		if(!empty($conf)) {
+			$this->load_configuration($conf);
 		}
 	}
 
@@ -239,7 +239,7 @@ class I18n {
 			trigger_error('No TranslateDriver was defined.', E_USER_ERROR);
 		}
 
-		// If lang path is empty, stop the process
+		// If the lang path is empty, stop the process
 		if(empty($this->lang_path)) {
 			trigger_error('No lang path was defined.', E_USER_ERROR);
 		}
