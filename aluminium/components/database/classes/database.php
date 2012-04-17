@@ -23,42 +23,42 @@ class Database {
 	 *
 	 * It must match a PDO driver name: http://php.net/manual/en/pdo.drivers.php
 	 */
-	public $driver_name;
+	protected $driver_name;
 
 	/**
 	 * Database hostname.
 	 *
 	 * @var string
 	 */
-	public $db_host;
+	protected $db_host;
 
 	/**
 	 * Database port.
 	 *
 	 * @var int
 	 */
-	public $db_port;
+	protected $db_port;
 
 	/**
 	 * Database name.
 	 *
 	 * @var string
 	 */
-	public $db_name;
+	protected $db_name;
 
 	/**
 	 * Database user.
 	 *
 	 * @var string
 	 */
-	public $db_user;
+	protected $db_user;
 
 	/**
 	 * Database password.
 	 *
 	 * @var string
 	 */
-	public $db_pass;
+	protected $db_pass;
 
 	/**
 	 * Database constructor.
@@ -67,7 +67,7 @@ class Database {
 	 *
 	 * @param	string	$conf_file	Name of the configuration file.
 	 */
-	public function __construct($conf_file = null) {
+	public function __construct($conf = null) {
 		// Default values
 		$this->db_host = '127.0.0.1';
 		$this->db_port = null;
@@ -75,9 +75,9 @@ class Database {
 		$this->db_user = 'nouser';
 		$this->db_pass = '';
 
-		// Load the configuration file, if any
-		if(!empty($conf_file)) {
-			$this->load_configuration_from_file($conf_file);
+		// Load the configuration, if defined
+		if(!empty($conf)) {
+			$this->load_configuration($conf);
 		}
 	}
 
@@ -88,16 +88,14 @@ class Database {
 	 */
 	public function load_configuration($conf) {
 		// If no driver was set, stop the process
-		if(empty($conf['driver'])) {
-			trigger_error('No PDO driver was defined.', E_USER_ERROR);
-		}
+		if(!empty($conf['driver'])) {
+			// If the specified driver is not valid, stop the process
+			$available_drivers = PDO::getAvailableDrivers();
+			if(!in_array($conf['driver_name'], $available_drivers)) {
+				trigger_error('The selected driver is not valid. Available drivers: '.implode(', ', $available_drivers).'.', E_USER_ERROR);
+			}
 
-		$this->driver_name = $conf['driver'];
-
-		// If the specified driver is not valid, stop the process
-		$available_drivers = PDO::getAvailableDrivers();
-		if(!in_array($this->driver_name, $available_drivers)) {
-			trigger_error('The selected driver is not valid. Available drivers: '.implode(', ', $available_drivers).'.', E_USER_ERROR);
+			$this->driver_name = $conf['driver'];
 		}
 
 		// Set the host, if defined
@@ -151,7 +149,6 @@ class Database {
 		if(!is_null($driver_name)) {
 			$this->driver_name = $driver_name;
 		}
-
 		// If driver name is empty, stop the process
 		if(empty($this->driver_name)) {
 			trigger_error('No DatabaseDriver was defined.', E_USER_ERROR);
