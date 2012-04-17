@@ -152,14 +152,11 @@ class I18n {
 	}
 
 	/**
-	 * Sets all the properties from a configuration file.
+	 * Sets all the properties from an array.
 	 *
-	 * @param	string	$conf_file	Name of the configuration file.
+	 * @param	array	$conf	An array containing the configuration options.
 	 */
-	public function load_configuration_from_file($conf_file) {
-		// Load the configuration file
-		$conf = require($conf_file);
-
+	public function load_configuration($conf) {
 		// Set the driver, if defined
 		if(!empty($conf['driver'])) {
 			$this->set_driver_name($conf['driver']);
@@ -181,6 +178,18 @@ class I18n {
 		}
 
 		$this->apply_locale();
+	}
+
+	/**
+	 * Sets all the properties from a configuration file.
+	 *
+	 * @param	string	$conf_file	Name of the configuration file.
+	 */
+	public function load_configuration_from_file($conf_file) {
+		// Load the configuration file
+		$conf = require($conf_file);
+
+		$this->load_configuration($conf);
 	}
 
 	/**

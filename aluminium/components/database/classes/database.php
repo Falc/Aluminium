@@ -79,18 +79,14 @@ class Database {
 		if(!empty($conf_file)) {
 			$this->load_configuration_from_file($conf_file);
 		}
-
 	}
 
 	/**
-	 * Sets all the properties from a configuration file.
+	 * Sets all the properties from an array.
 	 *
-	 * @param	string	$conf_file	Name of the configuration file.
+	 * @param	array	$conf	An array containing the configuration options.
 	 */
-	public function load_configuration_from_file($conf_file) {
-		// Load the configuration file
-		$conf = require($conf_file);
-
+	public function load_configuration($conf) {
 		// If no driver was set, stop the process
 		if(empty($conf['driver'])) {
 			trigger_error('No PDO driver was defined.', E_USER_ERROR);
@@ -128,6 +124,18 @@ class Database {
 		if(!empty($conf['pass'])) {
 			$this->db_pass = $conf['pass'];
 		}
+	}
+
+	/**
+	 * Sets all the properties from a configuration file.
+	 *
+	 * @param	string	$conf_file	Name of the configuration file.
+	 */
+	public function load_configuration_from_file($conf_file) {
+		// Load the configuration file
+		$conf = require($conf_file);
+
+		$this->load_configuration($conf);
 	}
 
 	/**
