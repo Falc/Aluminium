@@ -145,7 +145,7 @@ abstract class DatabaseDriver {
 				$output = '[database->connection->driver] '.$this->db_con->getAttribute(PDO::ATTR_DRIVER_NAME)."\n";
 				$output .= '[database->connection->host] '.$this->db_host."\n";
 				$output .= '[database->connection->port] '.$this->db_port."\n";
-				$output .= '[database->connection->db_name] '.$this->db_name."\n";
+				$output .= '[database->connection->name] '.$this->db_name."\n";
 				$output .= '[database->connection->user] '.$this->db_user."\n";
 				file_put_contents(DEBUG_FILE, $output, FILE_APPEND);
 			}

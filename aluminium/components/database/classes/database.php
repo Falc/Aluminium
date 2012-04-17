@@ -82,6 +82,133 @@ class Database {
 	}
 
 	/**
+	 * Gets the driver name.
+	 *
+	 * @return string
+	 */
+	public function get_driver_name() {
+		return $this->driver_name;
+	}
+
+	/**
+	 * Sets the driver name.
+	 *
+	 * @param	string	$driver_name	Driver name.
+	 */
+	public function set_driver_name($driver_name) {
+		// If driver name is empty, stop the process
+		if(empty($driver_name)) {
+			trigger_error('No DatabaseDriver was defined.', E_USER_ERROR);
+		}
+
+		// If the specified driver is not valid, stop the process
+		$available_drivers = PDO::getAvailableDrivers();
+
+		if(!in_array($driver_name, $available_drivers)) {
+			trigger_error('The selected driver is not valid. Available drivers: '.implode(', ', $available_drivers).'.', E_USER_ERROR);
+		}
+
+		// If the specified driver file does not exist, stop the process
+		$driver_file = dirname(__FILE__).'/drivers/'.$driver_name.'_driver.php';
+
+		if(!file_exists($driver_file)) {
+			trigger_error('File '.$driver_file.' does not exist or cannot be loaded.', E_USER_ERROR);
+		}
+
+		$this->driver_name = $driver_name;
+	}
+
+	/**
+	 * Gets the hostname.
+	 *
+	 * @return string
+	 */
+	public function get_db_host() {
+		return $this->db_host;
+	}
+
+	/**
+	 * Sets the hostname.
+	 *
+	 * @param	string	$db_host	Hostname.
+	 */
+	public function set_db_host($db_host) {
+		$this->db_host = $db_host;
+	}
+
+	/**
+	 * Gets the port.
+	 *
+	 * @return int
+	 */
+	public function get_db_port() {
+		return $this->db_port;
+	}
+
+	/**
+	 * Sets the port.
+	 *
+	 * @param	int	$db_port	Port.
+	 */
+	public function set_port($db_port) {
+		$this->db_port = is_numeric($db_port) ? intval($db_port) : null;
+	}
+
+	/**
+	 * Gets the database name.
+	 *
+	 * @return string
+	 */
+	public function get_db_name() {
+		return $this->db_name;
+	}
+
+	/**
+	 * Sets the database name.
+	 *
+	 * @param	string	$db_name	Database name.
+	 */
+	public function set_db_name($db_name) {
+		$this->db_name = $db_name;
+	}
+
+	/**
+	 * Gets the user name.
+	 *
+	 * @return string
+	 */
+	public function get_db_user() {
+		return $this->db_user;
+	}
+
+	/**
+	 * Sets the user name.
+	 *
+	 * @param	string	$db_user	User name.
+	 */
+	public function set_db_user($db_user) {
+		$this->db_user = $db_user;
+	}
+
+	/**
+	 * Gets the password.
+	 *
+	 * @return string
+	 */
+	public function get_db_pass() {
+		return $this->db_pass;
+	}
+
+	/**
+	 * Sets the password.
+	 *
+	 * @param	string	$db_pass	Password.
+	 */
+	public function set_db_pass($db_pass) {
+		$this->db_pass = $db_pass;
+	}
+
+	/**
 	 * Sets all the properties from an array.
 	 *
 	 * @param	array	$conf	An array containing the configuration options.
@@ -89,38 +216,32 @@ class Database {
 	public function load_configuration($conf) {
 		// If no driver was set, stop the process
 		if(!empty($conf['driver'])) {
-			// If the specified driver is not valid, stop the process
-			$available_drivers = PDO::getAvailableDrivers();
-			if(!in_array($conf['driver_name'], $available_drivers)) {
-				trigger_error('The selected driver is not valid. Available drivers: '.implode(', ', $available_drivers).'.', E_USER_ERROR);
-			}
-
-			$this->driver_name = $conf['driver'];
+			$this->set_driver_name($conf['driver']);
 		}
 
 		// Set the host, if defined
 		if(!empty($conf['host'])) {
-			$this->db_host = $conf['host'];
+			$this->set_db_host($conf['host']);
 		}
 
 		// Set the port, if defined
 		if(!empty($conf['port'])) {
-			$this->db_port = $conf['port'];
+			$this->set_db_port($conf['port']);
 		}
 
 		// Set the database name, if defined
 		if(!empty($conf['name'])) {
-			$this->db_name = $conf['name'];
+			$this->set_db_name($conf['name']);
 		}
 
 		// Set the user, if defined
 		if(!empty($conf['user'])) {
-			$this->db_user = $conf['user'];
+			$this->set_db_user($conf['user']);
 		}
 
 		// Set the password, if defined
 		if(!empty($conf['pass'])) {
-			$this->db_pass = $conf['pass'];
+			$this->set_db_pass($conf['pass']);
 		}
 	}
 
@@ -147,24 +268,17 @@ class Database {
 	public function load_driver($driver_name = null) {
 		// Overwrite $this->driver_name if a driver name has been specified
 		if(!is_null($driver_name)) {
-			$this->driver_name = $driver_name;
-		}
-		// If driver name is empty, stop the process
-		if(empty($this->driver_name)) {
-			trigger_error('No DatabaseDriver was defined.', E_USER_ERROR);
+			$this->set_driver_name($driver_name);
 		}
 
 		// If the specified driver file does not exist, stop the process
-		$driver_file = dirname(__FILE__).'/drivers/'.$this->driver_name.'_driver.php';
-		if(!file_exists($driver_file)) {
-			trigger_error('File '.$driver_file.' does not exist or cannot be loaded.', E_USER_ERROR);
-		}
+		$driver_file = dirname(__FILE__).'/drivers/'.$driver_name.'_driver.php';
 
 		// Include the driver class file
 		require_once($driver_file);
 
 		// Create the driver instance
-		$driver_class = $this->driver_name.'Driver';
+		$driver_class = $this->get_driver_name().'Driver';
 		return new $driver_class(
 			$this->db_host,
 			$this->db_port,
