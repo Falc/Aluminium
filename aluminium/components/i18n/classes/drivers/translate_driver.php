@@ -85,6 +85,13 @@ abstract class TranslateDriver {
 	}
 
 	/**
+	 * Clears the source.
+	 */
+	public function clear_source() {
+		$this->source = array();
+	}
+
+	/**
 	 * Loads a single language file.
 	 *
 	 * @param	string	$file_name	Name of the language file.
