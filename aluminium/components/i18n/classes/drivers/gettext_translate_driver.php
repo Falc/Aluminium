@@ -26,8 +26,15 @@ class GettextTranslateDriver extends TranslateDriver {
 	 * @param	string	$file_name	Name of the language file.
 	 */
 	public function load_file($file_name) {
+		$full_file_name = $this->lang_path.'/'.$this->locale.'/LC_MESSAGES/'.$file_name;
+
+		// If the transaltion files do not exist (neither the .po nor the .mo), stop the process
+		if(!file_exists($full_file_name.'.mo') && !file_exists($full_file_name.'.po')) {
+			trigger_error('Neither "'.$file_name.'.po" nor "'.$file_name.'.mo" exist or can be loaded.', E_USER_ERROR);
+		}
+
 		if(!in_array($file_name, $this->source)) {
-			bindtextdomain($file_name, APP_LANG);
+			bindtextdomain($file_name, $this->lang_path);
 			$this->source[] = $file_name;
 		}
 	}
@@ -36,7 +43,7 @@ class GettextTranslateDriver extends TranslateDriver {
 	 * Loads all the language files found in the locale directory.
 	 */
 	public function load_all_files() {
-		if($dir_handle = opendir(APP_LANG.$this->locale.'/LC_MESSAGES/')) {
+		if($dir_handle = opendir($this->lang_path.'/'.$this->locale.'/LC_MESSAGES/')) {
 			// Run load_file() for every .po or .mo file
 			while(($file = readdir($dir_handle)) !== FALSE) {
 				$ext = pathinfo($file, PATHINFO_EXTENSION);
