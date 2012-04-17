@@ -31,6 +31,13 @@ abstract class TranslateDriver {
 	protected $source;
 
 	/**
+	 * Lang path.
+	 *
+	 * @var string
+	 */
+	protected $lang_path;
+
+	/**
 	 * The locale name.
 	 *
 	 * @var string
@@ -44,9 +51,10 @@ abstract class TranslateDriver {
 	 *
 	 * @param	string	$locale	Locale name.
 	 */
-	public function __construct($locale) {
-		$this->locale = $locale;
+	public function __construct($lang_path, $locale) {
 		$this->source = array();
+		$this->lang_path = $lang_path;
+		$this->locale = $locale;
 	}
 
 	/**

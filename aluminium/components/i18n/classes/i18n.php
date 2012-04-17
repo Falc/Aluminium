@@ -24,6 +24,13 @@ class I18n {
 	public $driver_name;
 
 	/**
+	 * Lang path.
+	 *
+	 * @var string
+	 */
+	protected $lang_path;
+
+	/**
 	 * Locale name.
 	 *
 	 * The locale name format should be like 'll_CC', where 'll' is an ISO 639 two-letter code and 'CC' is an ISO 3166 country code.
@@ -51,6 +58,7 @@ class I18n {
 	public function __construct($conf_file = null) {
 		// Default values
 		$this->driver_name = null;
+		$this->lang_path = null;
 		$this->locale = 'en_US';
 		$this->codeset = 'UTF-8';
 
@@ -58,33 +66,6 @@ class I18n {
 		if(!empty($conf_file)) {
 			$this->load_configuration_from_file($conf_file);
 		}
-	}
-
-	/**
-	 * Sets all the properties from a configuration file.
-	 *
-	 * @param	string	$conf_file	Name of the configuration file.
-	 */
-	public function load_configuration_from_file($conf_file) {
-		// Load the configuration file
-		$conf = require($conf_file);
-
-		// Set the driver, if defined
-		if(!empty($conf['driver'])) {
-			$this->driver_name = $conf['driver'];
-		}
-
-		// Set the locale, if defined
-		if(!empty($conf['locale'])) {
-			$this->locale = $conf['locale'];
-		}
-
-		// Set the codeset, if defined
-		if(!empty($conf['codeset'])) {
-			$this->codeset = $conf['codeset'];
-		}
-
-		$this->apply_locale();
 	}
 
 	/**
@@ -108,6 +89,38 @@ class I18n {
 	 */
 	public function set_codeset($codeset) {
 		$this->codeset = $codeset;
+		$this->apply_locale();
+	}
+
+	/**
+	 * Sets all the properties from a configuration file.
+	 *
+	 * @param	string	$conf_file	Name of the configuration file.
+	 */
+	public function load_configuration_from_file($conf_file) {
+		// Load the configuration file
+		$conf = require($conf_file);
+
+		// Set the driver, if defined
+		if(!empty($conf['driver'])) {
+			$this->set_driver_name($conf['driver']);
+		}
+
+		// Set the lang path, if defined
+		if(!empty($conf['lang_path'])) {
+			$this->set_lang_path($conf['lang_path']);
+		}
+
+		// Set the locale, if defined
+		if(!empty($conf['locale'])) {
+			$this->set_locale($conf['locale']);
+		}
+
+		// Set the codeset, if defined
+		if(!empty($conf['codeset'])) {
+			$this->set_codeset($conf['codeset']);
+		}
+
 		$this->apply_locale();
 	}
 
@@ -158,6 +171,11 @@ class I18n {
 			trigger_error('No TranslateDriver was defined.', E_USER_ERROR);
 		}
 
+		// If lang path is empty, stop the process
+		if(empty($this->lang_path)) {
+			trigger_error('No lang path was defined.', E_USER_ERROR);
+		}
+
 		// If the specified driver file does not exist, stop the process
 		$driver_file = dirname(__FILE__).'/drivers/'.$this->driver_name.'_translate_driver.php';
 		if(!file_exists($driver_file)) {
@@ -169,7 +187,7 @@ class I18n {
 
 		// Create the driver instance
 		$driver_class = $this->driver_name.'TranslateDriver';
-		return new $driver_class($this->locale);
+		return new $driver_class($this->lang_path, $this->locale);
 	}
 
 }
