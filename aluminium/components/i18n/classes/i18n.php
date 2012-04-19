@@ -51,9 +51,9 @@ class I18n {
 	/**
 	 * I18n constructor.
 	 *
-	 * Sets the configuration option from $conf_file, if specified.
+	 * Sets the configuration option from $conf, if specified.
 	 *
-	 * @param	string	$conf_file	Name of the configuration file.
+	 * @param	string	$conf	An array containing configuration options.
 	 */
 	public function __construct($conf = null) {
 		// Default values
@@ -152,9 +152,9 @@ class I18n {
 	}
 
 	/**
-	 * Sets all the properties from an array.
+	 * Sets properties from an array.
 	 *
-	 * @param	array	$conf	An array containing the configuration options.
+	 * @param	array	$conf	An array containing some configuration options.
 	 */
 	public function load_configuration($conf) {
 		// Set the driver, if defined
@@ -181,7 +181,7 @@ class I18n {
 	}
 
 	/**
-	 * Sets all the properties from a configuration file.
+	 * Sets properties from a configuration file.
 	 *
 	 * @param	string	$conf_file	Name of the configuration file.
 	 */
