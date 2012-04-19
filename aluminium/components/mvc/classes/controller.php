@@ -38,6 +38,11 @@ abstract class Controller {
 		$this->parameters = (array) $parameters;
 	}
 
+	/**
+	 * The default action.
+	 */
+	abstract public function index();
+
 }
 
 ?>
