@@ -44,10 +44,31 @@ class Aluminium {
 		// Load app's main configuration
 		$this->main_conf = require_once(APP_CONF.'main_conf.php');
 
-		// Check the debug mode configuration option and start it if required
-		$debug_mode = ($this->main_conf['debug_mode'] === TRUE);
-		define('DEBUG_MODE', $debug_mode);
+		// Default values for $debug_mode and $base_path
+		$debug_mode = FALSE;
+		$base_path = '/';
 
+		// Process the configuration options
+		foreach($this->main_conf as $key=>$value) {
+			switch($key) {
+				// Set the debug mode
+				case 'debug_mode':
+					$debug_mode = ($value === TRUE);
+					define('DEBUG_MODE', $debug_mode);
+					break;
+				// Set the base path
+				case 'base_path':
+					$base_path = !empty($value) ? $value : '/';
+					define('APP_BASE_PATH', $base_path);
+					break;
+				// Every other configuration option will be defined as constant too
+				default:
+					define(strtoupper($key), $value);
+					break;
+			}
+		}
+
+		// Start the debug mode, if required
 		if(DEBUG_MODE === TRUE) {
 			if(!defined('DEBUG_FILE')) {
 				$tmpfile = stream_get_meta_data(tmpfile());
@@ -57,10 +78,6 @@ class Aluminium {
 			error_reporting(E_ALL);
 			ini_set('display_errors', 1);
 		}
-
-		// Define the app's base_path
-		$base_path = !empty($this->main_conf['base_path']) ? $this->main_conf['base_path'] : '/';
-		define('APP_BASE_PATH', $base_path);
 	}
 
     /**
