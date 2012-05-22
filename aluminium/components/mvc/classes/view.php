@@ -24,14 +24,7 @@ class View {
 	protected $_vars;
 
 	/**
-	 * The name of the theme, if using any. It is used to compose the path when looking for a template to load.
-	 *
-	 * @var string
-	 */
-	protected $_theme;
-
-	/**
-	 * The name of the template. It is used to compose the path when looking for a template to load.
+	 * The name of the template to load.
 	 *
 	 * @var string
 	 */
@@ -47,61 +40,116 @@ class View {
 	/**
 	 * View constructor.
 	 *
-	 * @param	mixed	$template	The template's name or null.
-	 * @param	mixed	$theme		The theme's name or null.
+	 * @param	mixed	$template	Name of the template to load.
 	 */
-	public function __construct($template = null, $theme = null) {
+	public function __construct($template) {
 		$this->_vars = array();
-		$this->_theme = $theme;
-		$this->_template = $template;
 		$this->_content = null;
-	}
 
-	/**
-	 * Magic get.
-	 *
-	 * @param	int		$index	Index of the element in the array.
-	 * @return	mixed
-	 */
-	public function __get($index) {
-		return $this->_vars[$index];
-	}
-
-	/**
-	 * Magic set.
-	 *
-	 * @param	int		$index	Index of the element in the array.
-	 * @param	mixed	$value	Data to store in the array.
-	 */
-	public function __set($index, $value) {
-		$this->_vars[$index] = $value;
-	}
-
-	/**
-	 * Builds the view pushing the vars into the specified template.
-	 *
-	 * This method does not display the view, just builds it and stores the content into the $_content
-	 * property for reusing it later, when desired.
-	 */
-	public function build() {
-		if(empty($this->_template)) {
-			trigger_error('Template is not defined.', E_USER_ERROR);
-		}
-
-		$template_name = empty($this->_theme) ? $this->_theme : '';
-		$template_name .= $this->_template.'.php';
-		$template_file = APP_VIEWS.$template_name;
+		$template_file = APP_VIEWS.$template.'.php';
 
 		if(!file_exists($template_file)) {
 			trigger_error('Template '.$template_file.' does not exist or cannot be loaded.', E_USER_ERROR);
 		}
 
-		foreach ($this->_vars as $name => $value) {
-			$$name = $value;
+		$this->_template = $template;
+	}
+
+	/**
+	 * Magic get.
+	 *
+	 * @param	mixed	$name	Name of the variable to get.
+	 * @return	mixed
+	 */
+	public function __get($name) {
+		return $this->_vars[$name];
+	}
+
+	/**
+	 * Magic set.
+	 *
+	 * Relies on the load() method.
+	 *
+	 * @param	mixed	$name	Name of the variable to load.
+	 * @param	mixed	$value	Content.
+	 */
+	public function __set($name, $value) {
+		$this->load($name, $value, FALSE);
+	}
+
+	/**
+	 * Loads a variable or a View.
+	 *
+	 * If $filtered is set to TRUE, the content of the variable will be filtered.
+	 * Views will NOT be filtered.
+	 *
+	 * @param	mixed	$name		Name of the variable to load.
+	 * @param	mixed	$value		Content.
+	 * @param	bool	$filtered	Determines whether $value should be filtered.
+	 */
+	public function load($name, $value, $filtered = FALSE) {
+		if(!($value instanceof View)) {
+			if($filtered === TRUE) {
+				$value = htmlspecialchars($value);
+			}
+		}
+
+		$this->_vars[$name] = $value;
+	}
+
+	/**
+	 * Loads a variable or a View.
+	 *
+	 * This is a convenience method for load(), specifying $filtered as TRUE.
+	 *
+	 * @param	mixed	$name		Name of the variable to load.
+	 * @param	mixed	$value		Content.
+	 */
+	public function load_filtered($name, $value) {
+		$this->load($name, $value, TRUE);
+	}
+
+	/**
+	 * Tells whether the view is built or not.
+	 *
+	 * @return	bool	TRUE if the view is built, else FALSE.
+	 */
+	public function is_built() {
+		return !is_null($this->get_content());
+	}
+
+	/**
+	 * Gets the view content.
+	 *
+	 * @return	string|null	The content of the view. Returns null if the view is not built.
+	 */
+	public function get_content() {
+		return $this->_content;
+	}
+
+	/**
+	 * Builds the view pushing the vars into the specified template.
+	 *
+	 * This method does not display the view, just builds it and stores the content into $_content for
+	 * reusing it later, when desired.
+	 */
+	public function build() {
+		$template_file = APP_VIEWS.$this->_template.'.php';
+
+		// Process the _vars array
+		foreach($this->_vars as $name => $value) {
+			// If the var is a View, build it
+			if($value instanceof View) {
+				$value->build();
+				$$name = $value->get_content();
+			}
+			else {
+				$$name = $value;
+			}
 		}
 
 		ob_start();
-		include(APP_VIEWS.$template_name);
+		include($template_file);
 		$this->_content = ob_get_clean();
 	}
 
@@ -116,16 +164,6 @@ class View {
 
 		echo $this->_content;
 	}
-
-	/**
-	 * Gets the view content.
-	 *
-	 * @return	The content of the view after being built.
-	 */
-	public function get_content() {
-		return $this->_content;
-	}
-
 }
 
 ?>
