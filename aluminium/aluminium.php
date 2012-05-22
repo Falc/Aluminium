@@ -17,7 +17,7 @@
  */
 class Aluminium {
 
-	public $main_conf;
+	public $conf;
 
 	/**
 	 * Aluminium's constructor.
@@ -42,14 +42,14 @@ class Aluminium {
 		date_default_timezone_set('UTC');
 
 		// Load app's main configuration
-		$this->main_conf = require_once(APP_CONF.'main_conf.php');
+		$this->conf = require_once(APP_CONF.'main_conf.php');
 
 		// Default values for $debug_mode and $base_path
 		$debug_mode = FALSE;
 		$base_path = '/';
 
 		// Process the configuration options
-		foreach($this->main_conf as $key=>$value) {
+		foreach($this->conf as $key=>$value) {
 			switch($key) {
 				// Set the debug mode
 				case 'debug_mode':
@@ -70,13 +70,16 @@ class Aluminium {
 
 		// Start the debug mode, if required
 		if(DEBUG_MODE === TRUE) {
+			error_reporting(E_ALL);
+			ini_set('display_errors', 1);
+
 			if(!defined('DEBUG_FILE')) {
 				$tmpfile = stream_get_meta_data(tmpfile());
 				define('DEBUG_FILE', $tmpfile['uri']);
-			}
 
-			error_reporting(E_ALL);
-			ini_set('display_errors', 1);
+				// Create the file by writing something in it
+				file_put_contents(DEBUG_FILE, "ALUMINIUM DEBUG FILE\n", FILE_APPEND);
+			}
 		}
 	}
 
