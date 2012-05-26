@@ -51,15 +51,20 @@ class Aluminium {
 		// Process the configuration options
 		foreach($this->conf as $key=>$value) {
 			switch($key) {
+				// Set the base path
+				case 'base_path':
+					$base_path = !empty($value) ? $value : '/';
+					define('APP_BASE_PATH', $base_path);
+					break;
 				// Set the debug mode
 				case 'debug_mode':
 					$debug_mode = ($value === TRUE);
 					define('DEBUG_MODE', $debug_mode);
 					break;
-				// Set the base path
-				case 'base_path':
-					$base_path = !empty($value) ? $value : '/';
-					define('APP_BASE_PATH', $base_path);
+				// Set the app name, if defined
+				case 'name':
+					$name = !empty($value) ? $value : 'Untitled';
+					define('APP_NAME', $name);
 					break;
 				// Every other configuration option will be defined as constant too
 				default:
