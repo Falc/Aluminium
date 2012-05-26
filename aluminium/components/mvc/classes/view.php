@@ -10,7 +10,7 @@
  */
 
 /**
- * The View class allows to load templates and bind data from a controller.
+ * Views are responsible for displaying information.
  *
  * @package		Aluminium
  * @subpackage	Components
@@ -24,11 +24,11 @@ class View {
 	protected $_vars;
 
 	/**
-	 * The name of the template to load.
+	 * The name of the view to load.
 	 *
 	 * @var string
 	 */
-	protected $_template;
+	protected $_view_name;
 
 	/**
 	 * The content of the view after being built.
@@ -40,19 +40,31 @@ class View {
 	/**
 	 * View constructor.
 	 *
-	 * @param	mixed	$template	Name of the template to load.
+	 * @param	mixed	$view_name	Name of the view to load.
 	 */
-	public function __construct($template) {
+	public function __construct($view_name, $conf = null) {
 		$this->_vars = array();
 		$this->_content = null;
 
-		$template_file = APP_VIEWS.$template.'.php';
+		$view_file = APP_VIEWS.$view_name.'.php';
 
-		if(!file_exists($template_file)) {
-			trigger_error('Template '.$template_file.' does not exist or cannot be loaded.', E_USER_ERROR);
+		if(!file_exists($view_file)) {
+			trigger_error('View '.$view_file.' does not exist or cannot be loaded.', E_USER_ERROR);
 		}
 
-		$this->_template = $template;
+		// Load the configuration, if defined
+		if(!empty($conf)) {
+			// If $conf is an array, process it
+			if(is_array($conf)) {
+				$this->load_configuration($conf);
+			}
+			// If $conf is a string, assume it is a file
+			elseif(is_string($conf)) {
+				$this->load_configuration_from_file($conf);
+			}
+		}
+
+		$this->_view_name = $view_name;
 	}
 
 	/**
@@ -68,26 +80,53 @@ class View {
 	/**
 	 * Magic set.
 	 *
-	 * Relies on the load() method.
+	 * Relies on the set() method.
 	 *
-	 * @param	mixed	$name	Name of the variable to load.
+	 * @param	mixed	$name	Name of the variable to set.
 	 * @param	mixed	$value	Content.
 	 */
 	public function __set($name, $value) {
-		$this->load($name, $value, FALSE);
+		$this->set($name, $value, FALSE);
 	}
 
 	/**
-	 * Loads a variable or a View.
+	 * Sets variables from an array.
+	 *
+	 * @param	array	$conf	An array containing the variables to set.
+	 */
+	public function load_configuration($conf) {
+		foreach($conf as $index=>$var) {
+			$this->set($index, $var);
+		}
+	}
+
+	/**
+	 * Sets variables from a configuration file.
+	 *
+	 * @param	string	$conf_file	Name of the configuration file.
+	 */
+	public function load_configuration_from_file($conf_file) {
+		// If the specified file does not exist, stop the process
+		if(!file_exists($conf_file)) {
+			trigger_error('File '.$conf_file.' does not exist or cannot be loaded.', E_USER_ERROR);
+		}
+
+		// Load the configuration file and process its content
+		$conf = include($conf_file);
+		$this->load_configuration($conf);
+	}
+
+	/**
+	 * Sets a variable or a View.
 	 *
 	 * If $filtered is set to TRUE, the content of the variable will be filtered.
 	 * Views will NOT be filtered.
 	 *
-	 * @param	mixed	$name		Name of the variable to load.
+	 * @param	string	$name		Name of the variable to set.
 	 * @param	mixed	$value		Content.
 	 * @param	bool	$filtered	Determines whether $value should be filtered.
 	 */
-	public function load($name, $value, $filtered = FALSE) {
+	public function set($name, $value, $filtered = FALSE) {
 		if(!($value instanceof View)) {
 			if($filtered === TRUE) {
 				$value = htmlspecialchars($value);
@@ -98,15 +137,15 @@ class View {
 	}
 
 	/**
-	 * Loads a variable or a View.
+	 * Sets a variable or a View.
 	 *
-	 * This is a convenience method for load(), specifying $filtered as TRUE.
+	 * This is a convenience method for set(), specifying $filtered as TRUE.
 	 *
-	 * @param	mixed	$name		Name of the variable to load.
+	 * @param	string	$name		Name of the variable to set.
 	 * @param	mixed	$value		Content.
 	 */
-	public function load_filtered($name, $value) {
-		$this->load($name, $value, TRUE);
+	public function set_filtered($name, $value) {
+		$this->set($name, $value, TRUE);
 	}
 
 	/**
@@ -128,13 +167,13 @@ class View {
 	}
 
 	/**
-	 * Builds the view pushing the vars into the specified template.
+	 * Builds the view pushing the vars into the specified view.
 	 *
 	 * This method does not display the view, just builds it and stores the content into $_content for
 	 * reusing it later, when desired.
 	 */
 	public function build() {
-		$template_file = APP_VIEWS.$this->_template.'.php';
+		$view_file = APP_VIEWS.$this->_view_name.'.php';
 
 		// Process the _vars array
 		foreach($this->_vars as $name => $value) {
@@ -149,20 +188,20 @@ class View {
 		}
 
 		ob_start();
-		include($template_file);
+		include($view_file);
 		$this->_content = ob_get_clean();
 	}
 
 	/**
-	 * Displays the view.
+	 * Renders the view.
 	 */
-	public function display() {
+	public function render() {
 		// Build the view if not built yet
 		if(is_null($this->_content)) {
 			$this->build();
 		}
 
-		echo $this->_content;
+		echo $this->get_content();
 	}
 }
 
