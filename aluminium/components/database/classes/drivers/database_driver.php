@@ -460,6 +460,14 @@ abstract class DatabaseDriver {
 	}
 
 	/**
+	 * Returns an array containing all of the result set rows as anonymous objects.
+	 */
+	public function fetch_all_as_object() {
+		$this->statement->setFetchMode(PDO::FETCH_OBJ);
+		return $this->fetch_all();
+	}
+
+	/**
 	 * Returns the next row from the result set.
 	 */
 	public function fetch() {
@@ -487,6 +495,14 @@ abstract class DatabaseDriver {
 		}
 
 		$this->statement->setFetchMode(PDO::FETCH_CLASS, $class, $parameters);
+		return $this->fetch();
+	}
+
+	/**
+	 * Returns the next row from the result set as an anonymous object.
+	 */
+	public function fetch_as_object() {
+		$this->statement->setFetchMode(PDO::FETCH_OBJ);
 		return $this->fetch();
 	}
 
