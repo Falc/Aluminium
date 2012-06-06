@@ -87,14 +87,6 @@ class Aluminium {
 			}
 		}
 	}
-
-    /**
-	 * This method starts Aluminium's processes.
-	 */
-	public function run() {
-		echo '<p>Aluminium is working!</p>';
-	}
-
 }
 
 ?>
