@@ -84,15 +84,26 @@ function instance_components(array $components) {
  *
  * If the base_path is passed, it is removed from the request uri.
  *
- * @param	string	$base_path	App's base path.
+ * @param	string	$base_path		App's base path.
+ * @param	boolean	$trim_slashes	Defines whether the request uri should get the trailing slashes trimmed.
  * @return	string	The request uri.
  */
-function get_request_uri($base_path = null) {
+function get_request_uri($base_path = null, $trim_slashes = FALSE) {
 	$request_uri = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
 
 	// If the app's base path is passed, remove it from $request_uri
 	if(!empty($base_path)) {
 		$request_uri = '/'.preg_replace('/^'.preg_quote($base_path, '/').'/', '', $request_uri);
+	}
+
+	// Remove the trailing slashes when required
+	if($trim_slashes === TRUE) {
+		$request_uri = rtrim($request_uri, '/');
+	}
+
+	// If the resulting request_uri is empty, use '/'
+	if(empty($request_uri)) {
+		$request_uri = '/';
 	}
 
 	return $request_uri;
