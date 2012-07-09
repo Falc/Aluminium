@@ -383,7 +383,7 @@ abstract class DatabaseDriver {
 			}
 
 			// Execute the statement
-			$this->statement->execute($this->params);
+			$success = $this->statement->execute($this->params);
 
 			if($this->query_type === QueryType::SELECT) {
 				// Set the default fetch mode to PDO::FETCH_ASSOC
@@ -411,6 +411,8 @@ abstract class DatabaseDriver {
 
 				file_put_contents(DEBUG_FILE, $output, FILE_APPEND);
 			}
+
+			return $success;
 		}
 		catch(PDOException $error) {
 			trigger_error($error->getMessage(), E_USER_ERROR);
