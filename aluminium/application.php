@@ -36,9 +36,6 @@ class Application {
 		define('ALUMINIUM_CORE',		ALUMINIUM_PATH.'core/');
 		define('ALUMINIUM_COMPONENTS',	ALUMINIUM_PATH.'components/');
 
-		// The core classes are required
-		require_once(ALUMINIUM_CORE.'functions.php');
-
 		// Set a default timezone
 		date_default_timezone_set('UTC');
 	}
