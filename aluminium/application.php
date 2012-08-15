@@ -81,6 +81,47 @@ class Application {
 			}
 		}
 	}
+
+	/**
+	 * Gets a configuration option.
+	 *
+	 * @param	string	$option	The configuration option to get.
+	 * @return	mixed			The configuration option value.
+	 */
+	protected function get_conf_option($option) {
+		return $this->conf[$option];
+	}
+
+	/**
+	 * Sets a configuration option.
+	 *
+	 * @param	string	$option	The configuration option to set.
+	 * @param	mixed	$value	The configuration option value.
+	 */
+	protected function set_conf_option($option, $value) {
+		$this->conf[$option] = $value;
+	}
+
+	/**
+	 * Sets a list of configuration options.
+	 *
+	 * @param	array	$options	An associative array containing configuration options.
+	 */
+	protected function set_conf_options($options) {
+		foreach($options as $option=>$value) {
+			$this->set_conf_option($option, $value);
+		}
+	}
+
+	/**
+	 * Sets configuration options from a file.
+	 *
+	 * @param	string	$file	A file that returns an associative array containing configuration options.
+	 */
+	protected function set_conf_options_from_file($file) {
+		$options = require($file);
+		$this->set_conf_options($options);
+	}
 }
 
 ?>
