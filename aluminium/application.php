@@ -5,70 +5,63 @@
  * @author		Aitor García <aitor.falc@gmail.com>
  * @copyright	2012 Aitor García <aitor.falc@gmail.com>
  * @license		https://github.com/Falc/Aluminium/blob/master/LICENSE Simplified BSD License
- * @package		Aluminium
- * @subpackage	Core
  */
 
 /**
  * Main class.
- *
- * @package		Aluminium
- * @subpackage	Core
  */
-class Aluminium {
-
-	public $conf;
+class Application {
+	/**
+	 * Configuration options.
+	 *
+	 * @var array
+	 */
+	private $conf = array(
+		'app_base_path' => '/',
+		'debug_mode'	=> FALSE
+	);
 
 	/**
-	 * Aluminium's constructor.
+	 * Constructor.
 	 *
-	 * @param	string	$path	The app's root folder where the app is located, usually dirname(__FILE__).
+	 * Defines some constants and loads the required files.
 	 */
-	public function __construct($path) {
+	public function __construct() {
 		// Define Aluminium's main paths
-		define('ALUMINIUM_PATH',		dirname(__FILE__).'/');
+		if(!defined('ALUMINIUM_PATH')) {
+			define('ALUMINIUM_PATH',		dirname(__FILE__).'/');
+		}
+
 		define('ALUMINIUM_CORE',		ALUMINIUM_PATH.'core/');
 		define('ALUMINIUM_COMPONENTS',	ALUMINIUM_PATH.'components/');
-
-		// Define the app's main paths
-		define('APP_PATH',		$path.'/');
-		define('APP_CONF',		APP_PATH.'conf/');
-		define('APP_LOGS',		APP_PATH.'logs/');
 
 		// The core classes are required
 		require_once(ALUMINIUM_CORE.'functions.php');
 
 		// Set a default timezone
 		date_default_timezone_set('UTC');
+	}
 
-		// Load app's main configuration
-		$this->conf = require_once(APP_CONF.'main_conf.php');
-
-		// Default values for $debug_mode and $base_path
-		$debug_mode = FALSE;
-		$base_path = '/';
-
+	/**
+	 * Initializes the application.
+	 */
+	protected function init() {
 		// Process the configuration options
-		foreach($this->conf as $key=>$value) {
-			switch($key) {
+		foreach($this->conf as $option=>$value) {
+			switch($option) {
 				// Set the base path
-				case 'base_path':
-					$base_path = !empty($value) ? $value : '/';
-					define('APP_BASE_PATH', $base_path);
+				case 'app_base_path':
+					$app_base_path = !empty($value) ? $value : '/';
+					define('APP_BASE_PATH', $app_base_path);
 					break;
 				// Set the debug mode
 				case 'debug_mode':
 					$debug_mode = ($value === TRUE);
 					define('DEBUG_MODE', $debug_mode);
 					break;
-				// Set the app name, if defined
-				case 'name':
-					$name = !empty($value) ? $value : 'Untitled';
-					define('APP_NAME', $name);
-					break;
 				// Every other configuration option will be defined as constant too
 				default:
-					define(strtoupper($key), $value);
+					define(strtoupper($option), $value);
 					break;
 			}
 		}
