@@ -28,7 +28,7 @@ class GettextTranslateDriver extends TranslateDriver {
 	public function load_file($file_name) {
 		$full_file_name = $this->lang_path.'/'.$this->locale.'/LC_MESSAGES/'.$file_name;
 
-		// If the transaltion files do not exist (neither the .po nor the .mo), stop the process
+		// If there is not any translation file (neither the .po nor the .mo), stop the process
 		if(!file_exists($full_file_name.'.mo') && !file_exists($full_file_name.'.po')) {
 			trigger_error('Neither "'.$file_name.'.po" nor "'.$file_name.'.mo" exist or can be loaded.', E_USER_ERROR);
 		}

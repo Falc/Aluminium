@@ -59,7 +59,7 @@ abstract class DatabaseDriver {
 	protected $db_pass;
 
 	/**
-	 * The SQL Query to process when calling execute().
+	 * The SQL query to process when calling execute().
 	 *
 	 * @var string
 	 */
@@ -316,6 +316,12 @@ abstract class DatabaseDriver {
 		}
 
 		$this->query .= $where;
+
+		return $this;
+	}
+
+	public function group_by($group_by) {
+		$this->query .= ' GROUP BY '.$group_by;
 
 		return $this;
 	}
