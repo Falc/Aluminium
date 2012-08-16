@@ -73,5 +73,38 @@ abstract class Controller {
 	 * The default action.
 	 */
 	abstract public function index();
+
+	/**
+	 * Loads a model.
+	 *
+	 * @param	string	$model_name	The name of the model to load.
+	 */
+	private function load_model($model_name) {
+		$model_file = APP_MODELS.$model_name.'_model.php';
+		require_once($model_file);
+	}
+
+	/**
+	 * Instances a model.
+	 *
+	 * @param	string	$model_name	The name of the model to load.
+	 */
+	private function instance_model($model_name) {
+		// Load the model
+		$this->load_model($model_name);
+
+		// Class names don't use underscores, so remove them and add the 'Model' suffix
+		$class = str_replace('_', '', $model_name);
+		$class .= 'Model';
+
+		// If the class does not exist, display an error
+		if(!class_exists($class, FALSE)) {
+			$message = 'Class "'.$class.'" not found.';
+			trigger_error($message, E_USER_ERROR);
+		}
+
+		return new $class();
+	}
+
 }
 ?>
