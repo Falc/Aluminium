@@ -67,6 +67,25 @@ abstract class Application {
 			}
 		}
 
+		// Get the requested uri
+		$requested_uri = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
+
+		// If a base path other than '/' is defined, remove it from the requested uri
+		if(APP_BASE_PATH !== '/') {
+			$requested_uri = '/'.preg_replace('/^'.preg_quote(APP_BASE_PATH, '/').'/', '', $requested_uri);
+
+			// Remove the trailing slash
+			$requested_uri = rtrim($requested_uri, '/');
+
+			// If the resulting requested uri is empty, use '/'
+			if(empty($requested_uri)) {
+				$requested_uri = '/';
+			}
+		}
+
+		// The requested uri can be used from everywhere
+		define('APP_REQUESTED_URI', $requested_uri);
+
 		// Start the debug mode, if required
 		if(DEBUG_MODE === TRUE) {
 			error_reporting(E_ALL);
