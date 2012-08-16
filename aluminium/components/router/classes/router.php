@@ -5,25 +5,21 @@
  * @author		Aitor García <aitor.falc@gmail.com>
  * @copyright	2012 Aitor García <aitor.falc@gmail.com>
  * @license		https://github.com/Falc/Aluminium/blob/master/LICENSE Simplified BSD License
- * @package		Aluminium
- * @subpackage	Components
  */
+namespace Aluminium\Component\Router;
 
 /**
  * The Router manages all the processes related to routes.
  *
  * Stores a list of routes and allows to match a given path against them to find which should be used.
- *
- * @package		Aluminium
- * @subpackage	Components
  */
 class Router {
 	/**
-	 * A list of routes.
+	 * The loaded routes.
 	 *
 	 * @var array
 	 */
-	protected $routes;
+	protected $routes = array();
 
 	/**
 	 * Router constructor.
@@ -31,9 +27,6 @@ class Router {
 	 * Gets the routes from the configuration file.
 	 */
 	public function __construct($routes_file = null) {
-		// Default values
-		$this->routes = array();
-
 		// Load the routes file, if any
 		if(!empty($routes_file)) {
 			$this->load_routes_from_file($routes_file);
@@ -65,21 +58,21 @@ class Router {
 	 *
 	 * @param	array	An array containing the route data.
 	 */
-	public function add($data) {
-		$data = (array) $data;
+	public function add($route_data) {
+		$route_data = (array) $route_data;
 
-		// If path is not set
-		if(empty($data['path'])) {
+		// If the path is not set, discard the route
+		if(empty($route_data['path'])) {
 			return;
 		}
 
-		$path = $data['path'];
-
-		$method = !empty($data['method']) ? $data['method'] : null;
-		$params = !empty($data['params']) ? $data['params'] : null;
-		$values = !empty($data['values']) ? $data['values'] : null;
-		$secure = !empty($data['secure']) ? $data['secure'] : FALSE;
-
+		// Get the route data
+		$path = $route_data['path'];
+		$method = !empty($route_data['method']) ? $route_data['method'] : null;
+		$params = !empty($route_data['params']) ? $route_data['params'] : null;
+		$values = !empty($route_data['values']) ? $route_data['values'] : null;
+		$secure = !empty($route_data['secure']) ? $route_data['secure'] : FALSE;
+		
 		$route = new Route($path, $method, $params, $values, $secure);
 		$this->routes[] = $route;
 	}
@@ -129,7 +122,5 @@ class Router {
 
 		return null;
 	}
-
 }
-
 ?>
