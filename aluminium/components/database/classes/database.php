@@ -98,7 +98,7 @@ class Database {
 		}
 
 		// If the specified driver is not valid, stop the process
-		$available_drivers = PDO::getAvailableDrivers();
+		$available_drivers = \PDO::getAvailableDrivers();
 
 		if(!in_array($driver_name, $available_drivers)) {
 			trigger_error('The selected driver is not valid. Available drivers: '.implode(', ', $available_drivers).'.', E_USER_ERROR);
@@ -267,14 +267,14 @@ class Database {
 			$this->set_driver_name($driver_name);
 		}
 
-		// If the specified driver file does not exist, stop the process
-		$driver_file = dirname(__FILE__).'/drivers/'.$this->get_driver_name().'_driver.php';
-
 		// Include the driver class file
+		$driver_file = dirname(__FILE__).'/drivers/'.$this->get_driver_name().'_driver.php';
 		require_once($driver_file);
 
 		// Create the driver instance
-		$driver_class = $this->get_driver_name().'Driver';
+		$driver_class = "Aluminium\\Component\\Database\\Driver\\";
+		$driver_class .= $this->get_driver_name().'Driver';
+
 		return new $driver_class(
 			$this->db_host,
 			$this->db_port,
