@@ -102,7 +102,7 @@ abstract class Application {
 	 *
 	 * @param	string	$component	Name of the component to load.
 	 */
-	function load_component($component) {
+	protected function load_component($component) {
 		$init_file = ALUMINIUM_COMPONENTS.$component.'/init.php';
 
 		// If the init file does not exist, stop the process
@@ -120,7 +120,7 @@ abstract class Application {
 	 *
 	 * @param	array	$components	An array containing a list of components to load.
 	 */
-	function load_components(array $components) {
+	protected function load_components(array $components) {
 		foreach($components as $component) {
 			load_component($component);
 		}
@@ -134,7 +134,7 @@ abstract class Application {
 	 * @param	string	$component Name of the component to instance.
 	 * @return	mixed	A component instance.
 	 */
-	function instance_component($component) {
+	protected function instance_component($component) {
 		$instance_file = ALUMINIUM_COMPONENTS.$component.'/instance.php';
 
 		// If the instance file does not exist, stop the process
@@ -155,7 +155,7 @@ abstract class Application {
 	 * @param	array	$components	An array containing a list of components to instance.
 	 * @return	array	An array containing instances of components.
 	 */
-	function instance_components(array $components) {
+	protected function instance_components(array $components) {
 		$instances = array();
 
 		foreach($components as $component) {
