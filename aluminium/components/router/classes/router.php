@@ -95,7 +95,7 @@ class Router {
 			if($route->is_match($path, $server)) {
 				// [Debug log]
 				if(defined('DEBUG_FILE')) {
-					$output = '[router->route_matched] True'."\n";
+					$output = '[router->route_matched] TRUE'."\n";
 					$output .= '[router->route_match->path] '.$route->path."\n";
 					$output .= '[router->route_match->request_method] '.$server['REQUEST_METHOD']."\n";
 
@@ -116,7 +116,7 @@ class Router {
 
 		// [Debug log]
 		if(defined('DEBUG_FILE')) {
-			$output = '[router->route_matched] False'."\n";
+			$output = '[router->route_matched] FALSE'."\n";
 			file_put_contents(DEBUG_FILE, $output, FILE_APPEND);
 		}
 

@@ -44,8 +44,8 @@ class Route {
 	protected $values;
 
 	/**
-	 * When true, the `HTTPS` value must be `on`, or the `SERVER_PORT` must be 443.
-	 * When false, neither of those values may be present.  When null, it is ignored.
+	 * When TRUE, the `HTTPS` value must be `on`, or the `SERVER_PORT` must be 443.
+	 * When FALSE, neither of those values may be present.  When null, it is ignored.
 	 *
 	 * @var bool
 	 */
@@ -151,7 +151,7 @@ class Route {
 				 && $this->is_secure_match($server);
 
 		if(!$is_match) {
-			return false;
+			return FALSE;
 		}
 
 		// Populate the path matches into the route values
@@ -160,14 +160,14 @@ class Route {
 				$this->values[$key] = $val;
 			}
 		}
-		return true;
+		return TRUE;
 	}
 
 	/**
 	 * Checks that the path matches the Route regex.
 	 *
 	 * @param	string	$path	The path to match against.
-	 * @return	bool	True on a match, false if not.
+	 * @return	bool	TRUE on a match, FALSE if not.
 	 */
 	public function is_regex_match($path) {
 		$match = preg_match("#^{$this->regex}$#", $path, $this->matches);
@@ -179,27 +179,27 @@ class Route {
 	 * Checks that the Route `$method` matches the corresponding server value.
 	 *
 	 * @param	array	$server	A copy of $_SERVER.
-	 * @return	bool	True on a match, false if not.
+	 * @return	bool	TRUE on a match, FALSE if not.
 	 */
 	public function is_method_match($server) {
 		if(isset($this->method)) {
 			if(!isset($server['REQUEST_METHOD'])) {
-				return false;
+				return FALSE;
 			}
 
 			if(!in_array($server['REQUEST_METHOD'], $this->method)) {
-				return false;
+				return FALSE;
 			}
 		}
 
-		return true;
+		return TRUE;
 	}
 
 	/**
 	 * Checks that the Route `$secure` matches the corresponding server values.
 	 *
 	 * @param array $server A copy of $_SERVER.
-	 * @return bool True on a match, false if not.
+	 * @return bool TRUE on a match, FALSE if not.
 	 */
     public function is_secure_match($server) {
 		if($this->secure !== null) {
@@ -207,15 +207,15 @@ class Route {
 					  || (isset($server['SERVER_PORT']) && $server['SERVER_PORT'] == 443);
 
 			if($this->secure == TRUE && !$is_secure) {
-				return false;
+				return FALSE;
 			}
 
 			if($this->secure == FALSE && $is_secure) {
-				return false;
+				return FALSE;
 			}
 		}
 
-		return true;
+		return TRUE;
     }
 }
 ?>
