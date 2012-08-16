@@ -5,17 +5,13 @@
  * @author		Aitor García <aitor.falc@gmail.com>
  * @copyright	2012 Aitor García <aitor.falc@gmail.com>
  * @license		https://github.com/Falc/Aluminium/blob/master/LICENSE Simplified BSD License
- * @package		Aluminium
- * @subpackage	Components
  */
+namespace Aluminium\Component\Database\Driver;
 
 /**
  * The parent class for DatabaseDrivers.
  *
  * A DatabaseDriver allows to communicate with a specific database by wrapping the PHP Data Objects (PDO) extension.
- *
- * @package		Aluminium
- * @subpackage	Components
  */
 abstract class DatabaseDriver {
 	/**
@@ -513,7 +509,5 @@ abstract class DatabaseDriver {
 		$this->statement->setFetchMode(PDO::FETCH_OBJ);
 		return $this->fetch();
 	}
-
 }
-
 ?>
