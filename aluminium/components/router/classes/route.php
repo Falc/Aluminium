@@ -6,18 +6,13 @@
  *
  * @copyright	2010-2011 The Aura Project for PHP <http://auraphp.github.com/>
  * @license		https://github.com/auraphp/Aura.Router/blob/master/LICENSE Simplified BSD License
- * @package		Aluminium
- * @subpackage	Components
  */
+namespace Aluminium\Component\Router;
 
 /**
  * Represents an individual route with a path, params and values.
- *
- * @package		Aluminium
- * @subpackage	Components
  */
 class Route {
-
 	/**
 	 * The path for this Route with param tokens.
 	 *
@@ -85,6 +80,7 @@ class Route {
 		$this->values = (array) $values;
 		$this->secure = ($secure === null) ? null : (bool) $secure;
 
+		// Convert the path and params to a regular expression
 		$this->set_regex();
 	}
 
@@ -102,10 +98,10 @@ class Route {
 	 * Sets the regular expression for this Route based on its params.
 	 */
 	public function set_regex() {
+		// Extract the inline token params from the pathº
 		$pattern = "/\{:(.*?)(:(.*?))?\}/";
 		preg_match_all($pattern, $this->path, $matches, PREG_SET_ORDER);
 
-		// Extract inline token params from the path
 		foreach($matches as $match) {
 			$whole = $match[0];
 			$name = $match[1];
@@ -131,6 +127,7 @@ class Route {
 			foreach($this->params as $name => $subpattern) {
 				if($subpattern[0] != '(') {
 					$message = 'Subpattern for param "'.$name.'" must start with "("';
+					trigger_error($message, E_USER_ERROR);
 				}
 				else {
 					$keys[] = '{:'.$name.'}';
@@ -217,9 +214,8 @@ class Route {
 				return false;
 			}
 		}
+
 		return true;
     }
-
 }
-
 ?>
