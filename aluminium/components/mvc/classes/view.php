@@ -5,15 +5,11 @@
  * @author		Aitor García <aitor.falc@gmail.com>
  * @copyright	2012 Aitor García <aitor.falc@gmail.com>
  * @license		https://github.com/Falc/Aluminium/blob/master/LICENSE Simplified BSD License
- * @package		Aluminium
- * @subpackage	Components
  */
+namespace Aluminium\Component\MVC;
 
 /**
  * Views are responsible for displaying information.
- *
- * @package		Aluminium
- * @subpackage	Components
  */
 class View {
 	/**
@@ -204,5 +200,4 @@ class View {
 		echo $this->get_content();
 	}
 }
-
 ?>
