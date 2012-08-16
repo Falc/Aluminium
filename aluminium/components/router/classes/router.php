@@ -25,6 +25,8 @@ class Router {
 	 * Router constructor.
 	 *
 	 * Gets the routes from the configuration file.
+	 *
+	 * @param	string	$routes_file	A file containing routes.
 	 */
 	public function __construct($routes_file = null) {
 		// Load the routes file, if any
@@ -42,7 +44,7 @@ class Router {
 	/**
 	 * Loads the routes from a file.
 	 *
-	 * @param	string	$routes_file	Name of the routes file.
+	 * @param	string	$routes_file	A file containing routes.
 	 */
 	public function load_routes_from_file($routes_file) {
 		// Load the routes file

@@ -68,10 +68,11 @@ class Route {
 	/**
 	 * Route constructor.
 	 *
-	 * @param	string	$path The path for this Route with param token placeholders.
-	 * @param	mixed	$method The server REQUEST_METHOD must be one of these values.
-	 * @param	array	$params Map of param tokens to regex subpatterns.
-	 * @param	array	$values Default values for params.
+	 * @param	string	$path	The path for this Route with param token placeholders.
+	 * @param	mixed	$method	The server REQUEST_METHOD must be one of these values.
+	 * @param	array	$params	Map of param tokens to regex subpatterns.
+	 * @param	array	$values	Default values for params.
+	 * @param	boolean	$secure	TRUE if it is a secure route. Else FALSE.
 	 */
 	public function __construct($path, $method, $params, $values, $secure = FALSE) {
 		$this->path = $path;
