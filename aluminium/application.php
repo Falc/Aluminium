@@ -11,7 +11,7 @@ namespace Aluminium;
 /**
  * Main class.
  */
-class Application {
+abstract class Application {
 	/**
 	 * Configuration options.
 	 *
@@ -43,7 +43,10 @@ class Application {
 	/**
 	 * Initializes the application.
 	 */
-	protected function init() {
+	public function run() {
+		// Run the application configuration() method.
+		$this->configuration();
+
 		// Process the configuration options
 		foreach($this->conf as $option=>$value) {
 			switch($option) {
@@ -77,7 +80,20 @@ class Application {
 				file_put_contents(DEBUG_FILE, "ALUMINIUM DEBUG FILE\n", FILE_APPEND);
 			}
 		}
+
+		// Init the application
+		$this->init();
 	}
+
+	/**
+	 * The configuration method is called before init() and should be used to set up the application.
+	 */
+	protected abstract function configuration();
+
+	/**
+	 * Inits the application.
+	 */
+	protected abstract function init();
 
 	/**
 	 * Loads a component.
