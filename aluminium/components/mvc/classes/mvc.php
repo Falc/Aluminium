@@ -64,7 +64,7 @@ class MVC {
 		// Include the controller class file
 		require_once($class_file);
 
-		// The class names don't use underscores, so remove them and add the 'Controller' suffix
+		// Class names don't use underscores, so remove them and add the 'Controller' suffix
 		$class = str_replace('_', '', $controller_name);
 		$class .= 'Controller';
 
@@ -88,7 +88,7 @@ class MVC {
 		// Build the class file
 		$class_file = APP_CONTROLLERS.$this->controller_subdir.$controller_name.'_controller.php';
 
-		// The class names don't use underscores, so remove them and add the 'Controller' suffix
+		// Class names don't use underscores, so remove them and add the 'Controller' suffix
 		$class = str_replace('_', '', $controller_name);
 		$class .= 'Controller';
 
