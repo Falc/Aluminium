@@ -123,13 +123,7 @@ abstract class Application {
 	 */
 	protected function load_component($component) {
 		$init_file = ALUMINIUM_COMPONENTS.$component.'/init.php';
-
-		// If the init file does not exist, stop the process
-		if(!file_exists($init_file)) {
-			trigger_error('File "'.$init_file.'" does not exist or cannot be loaded.', E_USER_ERROR);
-		}
-
-		include($init_file);
+		require_once($init_file);
 	}
 
 	/**
@@ -155,14 +149,7 @@ abstract class Application {
 	 */
 	protected function instance_component($component) {
 		$instance_file = ALUMINIUM_COMPONENTS.$component.'/instance.php';
-
-		// If the instance file does not exist, stop the process
-		if(!file_exists($instance_file)) {
-			trigger_error('File "'.$instance_file.'" does not exist or cannot be loaded.', E_USER_ERROR);
-		}
-
-		$instance = include($instance_file);
-
+		$instance = require_once($instance_file);
 		return $instance;
 	}
 
