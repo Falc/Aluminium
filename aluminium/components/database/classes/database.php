@@ -6,7 +6,10 @@
  * @copyright	2012 Aitor García <aitor.falc@gmail.com>
  * @license		https://github.com/Falc/Aluminium/blob/master/LICENSE Simplified BSD License
  */
+
 namespace Aluminium\Component\Database;
+
+use \PDO;
 
 /**
  * The Database component enables to load a DatabaseDriver.
@@ -14,6 +17,7 @@ namespace Aluminium\Component\Database;
  * A DatabaseDriver allows to communicate with a specific database by wrapping the PHP Data Objects (PDO) extension.
  */
 class Database {
+
 	/**
 	 * Database driver name.
 	 *
@@ -98,7 +102,7 @@ class Database {
 		}
 
 		// If the specified driver is not valid, stop the process
-		$available_drivers = \PDO::getAvailableDrivers();
+		$available_drivers = PDO::getAvailableDrivers();
 
 		if(!in_array($driver_name, $available_drivers)) {
 			trigger_error('The selected driver is not valid. Available drivers: '.implode(', ', $available_drivers).'.', E_USER_ERROR);
@@ -283,5 +287,6 @@ class Database {
 			$this->db_pass
 		);
 	}
+
 }
 ?>
