@@ -6,19 +6,21 @@
  * @copyright	2012 Aitor García <aitor.falc@gmail.com>
  * @license		https://github.com/Falc/Aluminium/blob/master/LICENSE Simplified BSD License
  */
+
 namespace Aluminium;
 
 /**
  * Main class.
  */
 abstract class Application {
+
 	/**
 	 * Configuration options.
 	 *
 	 * @var array
 	 */
 	private $conf = array(
-		'app_base_path' => '/',
+		'base_path' => '/',
 		'debug_mode'	=> FALSE
 	);
 
@@ -47,32 +49,30 @@ abstract class Application {
 		// Run the application configuration() method.
 		$this->configuration();
 
-		// Process the configuration options
-		foreach($this->conf as $option=>$value) {
-			switch($option) {
-				// Set the base path
-				case 'app_base_path':
-					$app_base_path = !empty($value) ? $value : '/';
-					define('APP_BASE_PATH', $app_base_path);
-					break;
-				// Set the debug mode
-				case 'debug_mode':
-					$debug_mode = ($value === TRUE);
-					define('DEBUG_MODE', $debug_mode);
-					break;
-				// Every other configuration option will be defined as constant too
-				default:
-					define(strtoupper($option), $value);
-					break;
-			}
+		// Set the app base path
+		$base_path = !empty($this->conf['base_path']) ?
+			$this->conf['base_path'] :
+			'/';
+
+		if(!defined('BASE_PATH')) {
+			define('BASE_PATH', $base_path);
+		}
+
+		// Set the debug mode
+		$debug_mode = !empty($this->conf['debug_mode']) ?
+			($this->conf['debug_mode'] === TRUE) :
+			'FALSE';
+
+		if(!defined('DEBUG_MODE')) {
+			define('DEBUG_MODE', $debug_mode);
 		}
 
 		// Get the requested uri
 		$requested_uri = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
 
 		// If a base path other than '/' is defined, remove it from the requested uri
-		if(APP_BASE_PATH !== '/') {
-			$requested_uri = '/'.preg_replace('/^'.preg_quote(APP_BASE_PATH, '/').'/', '', $requested_uri);
+		if(BASE_PATH !== '/') {
+			$requested_uri = '/'.preg_replace('/^'.preg_quote(BASE_PATH, '/').'/', '', $requested_uri);
 
 			// Remove the trailing slash
 			$requested_uri = rtrim($requested_uri, '/');
@@ -84,7 +84,7 @@ abstract class Application {
 		}
 
 		// The requested uri can be used from everywhere
-		define('APP_REQUESTED_URI', $requested_uri);
+		define('REQUESTED_URI', $requested_uri);
 
 		// Start the debug mode, if required
 		if(DEBUG_MODE === TRUE) {
@@ -189,6 +189,11 @@ abstract class Application {
 	 */
 	protected function set_conf_option($option, $value) {
 		$this->conf[$option] = $value;
+
+		$name = strtoupper($option);
+		if(!defined($name)) {
+			define($name, $value);
+		}
 	}
 
 	/**
@@ -211,6 +216,6 @@ abstract class Application {
 		$options = require($file);
 		$this->set_conf_options($options);
 	}
-}
 
+}
 ?>
