@@ -6,19 +6,21 @@
  * @copyright	2012 Aitor García <aitor.falc@gmail.com>
  * @license		https://github.com/Falc/Aluminium/blob/master/LICENSE Simplified BSD License
  */
+
 namespace Aluminium\Component\MVC;
 
 /**
  * The MVC component enables the use of the Model View Controller pattern in the app.
  */
 class MVC {
+
 	/**
 	 * The relative path from the controllers root.
 	 *
 	 * Examples:
-	 * null		=> APP_CONTROLLERS/controller_name.php
-	 * 'admin'	=> APP_CONTROLLERS/admin/controller_name.php
-	 * 'aa/bb'	=> APP_CONTROLLERS/aa/bb/controller_name.php
+	 * null		=> CONTROLLERS_PATH/controller_name.php
+	 * 'admin'	=> CONTROLLERS_PATH/admin/controller_name.php
+	 * 'aa/bb'	=> CONTROLLERS_PATH/aa/bb/controller_name.php
 	 *
 	 * @var string|null
 	 */
@@ -54,7 +56,7 @@ class MVC {
 	 */
 	public function controller_is_loadable($controller_name) {
 		// Build the class file
-		$class_file = APP_CONTROLLERS.$this->controller_subdir.$controller_name.'_controller.php';
+		$class_file = CONTROLLERS_PATH.$this->controller_subdir.$controller_name.'_controller.php';
 
 		// If the class file does not exist, return FALSE
 		if(!file_exists($class_file)) {
@@ -86,7 +88,7 @@ class MVC {
 	 */
 	public function load_controller($controller_name, $parameters = null) {
 		// Build the class file
-		$class_file = APP_CONTROLLERS.$this->controller_subdir.$controller_name.'_controller.php';
+		$class_file = CONTROLLERS_PATH.$this->controller_subdir.$controller_name.'_controller.php';
 
 		// Class names don't use underscores, so remove them and add the 'Controller' suffix
 		$class = str_replace('_', '', $controller_name);
@@ -110,5 +112,6 @@ class MVC {
 
 		return $controller;
 	}
+
 }
 ?>

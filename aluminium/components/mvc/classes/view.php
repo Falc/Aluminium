@@ -6,12 +6,14 @@
  * @copyright	2012 Aitor García <aitor.falc@gmail.com>
  * @license		https://github.com/Falc/Aluminium/blob/master/LICENSE Simplified BSD License
  */
+
 namespace Aluminium\Component\MVC;
 
 /**
  * Views are responsible for displaying information.
  */
 class View {
+
 	/**
 	 * Contains data that can be displayed in the view.
 	 *
@@ -42,7 +44,7 @@ class View {
 		$this->_vars = array();
 		$this->_content = null;
 
-		$view_file = APP_VIEWS.$view_name.'.php';
+		$view_file = VIEWS_PATH.$view_name.'.php';
 
 		if(!file_exists($view_file)) {
 			trigger_error('View '.$view_file.' does not exist or cannot be loaded.', E_USER_ERROR);
@@ -169,7 +171,7 @@ class View {
 	 * reusing it later, when desired.
 	 */
 	public function build() {
-		$view_file = APP_VIEWS.$this->_view_name.'.php';
+		$view_file = VIEWS_PATH.$this->_view_name.'.php';
 
 		// Process the _vars array
 		foreach($this->_vars as $name => $value) {
@@ -199,5 +201,6 @@ class View {
 
 		echo $this->get_content();
 	}
+
 }
 ?>

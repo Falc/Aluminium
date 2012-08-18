@@ -6,12 +6,14 @@
  * @copyright	2012 Aitor García <aitor.falc@gmail.com>
  * @license		https://github.com/Falc/Aluminium/blob/master/LICENSE Simplified BSD License
  */
+
 namespace Aluminium\Component\MVC;
 
 /**
  * The parent class for controllers.
  */
 abstract class Controller {
+
 	/**
 	 * An array containing parameters defined by the user.
 	 *
@@ -80,7 +82,7 @@ abstract class Controller {
 	 * @param	string	$model_name	The name of the model to load.
 	 */
 	private function load_model($model_name) {
-		$model_file = APP_MODELS.$model_name.'_model.php';
+		$model_file = MODELS_PATH.$model_name.'_model.php';
 		require_once($model_file);
 	}
 
