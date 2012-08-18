@@ -2,14 +2,18 @@
 /**
  * This file contains the Application class.
  */
+
 namespace App;
+
+use Aluminium;
 
 /**
  * The main Application class.
  *
- * It must extend from \Aluminium\Application.
+ * It must extend from Aluminium\Application.
  */
-class Application extends \Aluminium\Application {
+class Application extends Aluminium\Application {
+
 	/**
 	 * The configuration method is called before init() and should be used to set up the application.
 	 *
@@ -28,5 +32,6 @@ class Application extends \Aluminium\Application {
 	 */
 	protected function init() {
 	}
+
 }
 ?>
