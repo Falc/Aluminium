@@ -7,12 +7,14 @@
  * @copyright	2010-2011 The Aura Project for PHP <http://auraphp.github.com/>
  * @license		https://github.com/auraphp/Aura.Router/blob/master/LICENSE Simplified BSD License
  */
+
 namespace Aluminium\Component\Router;
 
 /**
  * Represents an individual route with a path, params and values.
  */
 class Route {
+
 	/**
 	 * The path for this Route with param tokens.
 	 *
@@ -218,5 +220,6 @@ class Route {
 
 		return TRUE;
     }
+
 }
 ?>
