@@ -5,17 +5,15 @@
  * @author		Aitor García <aitor.falc@gmail.com>
  * @copyright	2012 Aitor García <aitor.falc@gmail.com>
  * @license		https://github.com/Falc/Aluminium/blob/master/LICENSE Simplified BSD License
- * @package		Aluminium
- * @subpackage	Components
  */
+
+namespace Aluminium\Component\I18n;
 
 /**
  * The I18n component allows to add multilingual support.
- *
- * @package		Aluminium
- * @subpackage	Components
  */
 class I18n {
+
 	/**
 	 * Translate driver name.
 	 *
@@ -259,5 +257,4 @@ class I18n {
 	}
 
 }
-
 ?>

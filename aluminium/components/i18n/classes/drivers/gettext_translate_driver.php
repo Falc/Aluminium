@@ -5,19 +5,17 @@
  * @author		Aitor García <aitor.falc@gmail.com>
  * @copyright	2012 Aitor García <aitor.falc@gmail.com>
  * @license		https://github.com/Falc/Aluminium/blob/master/LICENSE Simplified BSD License
- * @package		Aluminium
- * @subpackage	Components
  */
+
+namespace Aluminium\Component\I18n\Driver;
 
 /**
  * Gettext Translate Driver.
  *
  * This driver allows to get strings translated by using gettext.
- *
- * @package		Aluminium
- * @subpackage	Components
  */
 class GettextTranslateDriver extends TranslateDriver {
+
 	/**
 	 * Loads a single language file.
 	 *
@@ -79,5 +77,4 @@ class GettextTranslateDriver extends TranslateDriver {
 	}
 
 }
-
 ?>

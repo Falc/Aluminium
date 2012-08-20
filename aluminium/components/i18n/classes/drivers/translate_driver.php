@@ -5,19 +5,17 @@
  * @author		Aitor García <aitor.falc@gmail.com>
  * @copyright	2012 Aitor García <aitor.falc@gmail.com>
  * @license		https://github.com/Falc/Aluminium/blob/master/LICENSE Simplified BSD License
- * @package		Aluminium
- * @subpackage	Components
  */
+
+namespace Aluminium\Component\I18n\Driver;
 
 /**
  * The parent class for TranslateDrivers.
  *
  * A TranslateDriver allows to use a specific translation "process" or library.
- *
- * @package		Aluminium
- * @subpackage	Components
  */
 abstract class TranslateDriver {
+
 	/**
 	 * The "source" for the translation.
 	 *
@@ -111,5 +109,4 @@ abstract class TranslateDriver {
 	abstract public function t($text);
 
 }
-
 ?>
