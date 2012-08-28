@@ -5,17 +5,15 @@
  * @author		Aitor García <aitor.falc@gmail.com>
  * @copyright	2012 Aitor García <aitor.falc@gmail.com>
  * @license		https://github.com/Falc/Aluminium/blob/master/LICENSE Simplified BSD License
- * @package		Aluminium
- * @subpackage	Components
  */
+
+namespace Aluminium\Component\Debug;
 
 /**
  * The Debug component enables the use of some simple methods for debugging purposes.
- *
- * @package		Aluminium
- * @subpackage	Components
  */
 class Debug {
+
 	/**
 	 * List of all the debugging values stored into a multi-level array:
 	 * core => array(
@@ -234,5 +232,4 @@ class Debug {
 	}
 
 }
-
 ?>
