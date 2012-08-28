@@ -109,7 +109,7 @@ class Database {
 		}
 
 		// If the specified driver file does not exist, stop the process
-		$driver_file = dirname(__FILE__).'/drivers/'.$driver_name.'_driver.php';
+		$driver_file = dirname(__FILE__).'/drivers/'.$driver_name.'_database_driver.php';
 
 		if(!file_exists($driver_file)) {
 			trigger_error('File '.$driver_file.' does not exist or cannot be loaded.', E_USER_ERROR);
@@ -272,7 +272,7 @@ class Database {
 		}
 
 		// Include the driver class file
-		$driver_file = dirname(__FILE__).'/drivers/'.$this->get_driver_name().'_driver.php';
+		$driver_file = dirname(__FILE__).'/drivers/'.$this->get_driver_name().'_database_driver.php';
 		require_once($driver_file);
 
 		// Create the driver instance
