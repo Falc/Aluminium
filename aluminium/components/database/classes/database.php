@@ -277,7 +277,7 @@ class Database {
 
 		// Create the driver instance
 		$driver_class = "Aluminium\\Component\\Database\\Driver\\";
-		$driver_class .= $this->get_driver_name().'Driver';
+		$driver_class .= $this->get_driver_name().'DatabaseDriver';
 
 		return new $driver_class(
 			$this->db_host,

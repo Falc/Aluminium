@@ -14,7 +14,7 @@ use \PDO;
 /**
  * Database driver for MySQL.
  */
-class MySQLDriver extends DatabaseDriver {
+class MySQLDatabaseDriver extends DatabaseDriver {
 
 	/**
 	 * Creates a PDO instance using the MySQL driver.
