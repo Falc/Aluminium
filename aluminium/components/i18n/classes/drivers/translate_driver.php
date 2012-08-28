@@ -47,7 +47,8 @@ abstract class TranslateDriver {
 	 *
 	 * Loads the required configuration and checks it.
 	 *
-	 * @param	string	$locale	Locale name.
+	 * @param	string	$lang_path	The lang path.
+	 * @param	string	$locale		Locale name.
 	 */
 	public function __construct($lang_path, $locale) {
 		$this->source = array();
