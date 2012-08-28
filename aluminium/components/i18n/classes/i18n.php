@@ -51,7 +51,7 @@ class I18n {
 	 *
 	 * Sets the configuration option from $conf, if specified.
 	 *
-	 * @param	string	$conf	An array containing configuration options.
+	 * @param	array	$conf	An array containing configuration options.
 	 */
 	public function __construct($conf = null) {
 		// Default values
