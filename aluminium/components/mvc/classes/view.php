@@ -39,6 +39,7 @@ class View {
 	 * View constructor.
 	 *
 	 * @param	mixed	$view_name	Name of the view to load.
+	 * @param	array	$conf		An array containing configuration options.
 	 */
 	public function __construct($view_name, $conf = null) {
 		$this->_vars = array();
