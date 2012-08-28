@@ -252,7 +252,9 @@ class I18n {
 		require_once($driver_file);
 
 		// Create the driver instance
-		$driver_class = $this->driver_name.'TranslateDriver';
+		$driver_class = "Aluminium\\Component\\I18n\\Driver\\";
+		$driver_class .= $this->driver_name.'TranslateDriver';
+
 		return new $driver_class($this->lang_path, $this->locale);
 	}
 
