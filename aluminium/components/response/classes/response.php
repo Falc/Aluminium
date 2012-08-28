@@ -6,17 +6,15 @@
  *
  * @copyright	2010-2012 The Aura Project for PHP <http://auraphp.github.com/>
  * @license		https://github.com/auraphp/Aura.Http/blob/master/LICENSE Simplified BSD License
- * @package		Aluminium
- * @subpackage	Components
  */
+
+namespace Aluminium\Component\Response;
 
 /**
  * Represents an HTTP response that can be sent from the server to the client.
- *
- * @package		Aluminium
- * @subpackage	Components
  */
 class Response {
+
 	/**
 	 * The cookies for the response.
 	 *
@@ -242,5 +240,4 @@ class Response {
 	}
 
 }
-
 ?>

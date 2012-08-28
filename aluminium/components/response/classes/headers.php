@@ -6,17 +6,15 @@
  *
  * @copyright	2010-2012 The Aura Project for PHP <http://auraphp.github.com/>
  * @license		https://github.com/auraphp/Aura.Http/blob/master/LICENSE Simplified BSD License
- * @package		Aluminium
- * @subpackage	Components
  */
+
+namespace Aluminium\Component\Response;
 
 /**
  * Represents a collection of non-cookie HTTP headers.
- *
- * @package		Aluminium
- * @subpackage	Components
  */
 class Headers {
+
 	/**
 	 * The list that contains all the headers.
 	 *
@@ -112,5 +110,4 @@ class Headers {
 	}
 
 }
-
 ?>
