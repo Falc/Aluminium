@@ -146,6 +146,7 @@ class Route {
 	 * Checks if a given path and server values are a match for this Route.
 	 *
 	 * @param	string	$path	The path to check against this Route.
+	 * @param	array	$server	A copy of $_SERVER so that this Route can check against the server values.
 	 * @return	bool
 	 */
 	public function is_match($path, array $server) {
