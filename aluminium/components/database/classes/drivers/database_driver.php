@@ -321,8 +321,13 @@ abstract class DatabaseDriver {
 		return $this;
 	}
 
-	public function group_by($group_by) {
-		$this->query .= ' GROUP BY '.$group_by;
+	/**
+	 * Sets the GROUP BY part of a SELECT query.
+	 *
+	 * @param	string	$criteria	The criteria, usually column names.
+	 */
+	public function group_by($criteria) {
+		$this->query .= ' GROUP BY '.$criteria;
 
 		return $this;
 	}
@@ -330,11 +335,11 @@ abstract class DatabaseDriver {
 	/**
 	 * Sets the ORDER BY part of a SELECT query.
 	 *
-	 * @param	string	$sort_criteria	The sort criteria, usually column names.
-	 * @param	string	$direction		The sort direction. If not defined, ASC will be used.
+	 * @param	string	$criteria		The criteria, usually column names.
+	 * @param	string	$direction		The direction. If not defined, ASC will be used.
 	 */
-	public function order_by($order_by, $direction = 'ASC') {
-		$this->query .= ' ORDER BY '.$order_by.' '.$direction;
+	public function order_by($criteria, $direction = 'ASC') {
+		$this->query .= ' ORDER BY '.$criteria.' '.$direction;
 
 		return $this;
 	}
