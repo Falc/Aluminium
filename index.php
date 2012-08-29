@@ -4,7 +4,6 @@
 define('ALUMINIUM_PATH', dirname(__FILE__).'/aluminium/');
 define('APP_PATH',		 dirname(__FILE__).'/app/');
 define('CONF_PATH',		 APP_PATH.'conf/');
-define('LOGS_PATH',		 APP_PATH.'logs/');
 
 // Include the Application classes
 require(ALUMINIUM_PATH.'application.php');
