@@ -45,7 +45,7 @@ abstract class Application {
 	/**
 	 * Initializes the application.
 	 */
-	public function run() {
+	final public function run() {
 		// Run the application configuration() method.
 		$this->configuration();
 
