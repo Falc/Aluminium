@@ -22,11 +22,11 @@ class View {
 	protected $_vars;
 
 	/**
-	 * The name of the view to load.
+	 * The view file to load.
 	 *
 	 * @var string
 	 */
-	protected $_view_name;
+	protected $_view_file;
 
 	/**
 	 * The content of the view after being built.
@@ -38,17 +38,15 @@ class View {
 	/**
 	 * View constructor.
 	 *
-	 * @param	mixed	$view_name	Name of the view to load.
+	 * @param	mixed	$view_file	The view file to load.
 	 * @param	array	$conf		An array containing configuration options.
 	 */
-	public function __construct($view_name, $conf = null) {
+	public function __construct($view_file, $conf = null) {
 		$this->_vars = array();
 		$this->_content = null;
 
-		$view_file = VIEWS_PATH.$view_name.'.php';
-
 		if(!file_exists($view_file)) {
-			trigger_error('View '.$view_file.' does not exist or cannot be loaded.', E_USER_ERROR);
+			trigger_error('View "'.$view_file.'" does not exist or cannot be loaded.', E_USER_ERROR);
 		}
 
 		// Load the configuration, if defined
@@ -63,7 +61,7 @@ class View {
 			}
 		}
 
-		$this->_view_name = $view_name;
+		$this->_view_file = $view_file;
 	}
 
 	/**
@@ -172,8 +170,6 @@ class View {
 	 * reusing it later, when desired.
 	 */
 	public function build() {
-		$view_file = VIEWS_PATH.$this->_view_name.'.php';
-
 		// Process the _vars array
 		foreach($this->_vars as $name => $value) {
 			// If the var is a View, build it
@@ -187,7 +183,7 @@ class View {
 		}
 
 		ob_start();
-		include($view_file);
+		include($this->_view_file);
 		$this->_content = ob_get_clean();
 	}
 
